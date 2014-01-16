@@ -1,0 +1,430 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\Rich\Dropbox\DIGITALPERSONA\PROJECT\Banner\WORKSPACE\Cheddar_beta2\prj\Cheddar.uvproj
+Project File Date:  01/06/2014
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling UsbApi.c...
+linking...
+Program Size: data=9.0 xdata=0 code=32
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=9.0 xdata=0 code=32
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+SRC\MAIN.C(33): error C202: 'XBYTE': undefined identifier
+SRC\MAIN.C(34): error C202: 'XBYTE': undefined identifier
+SRC\MAIN.C(35): error C202: 'XBYTE': undefined identifier
+compiling UsbApi.c...
+Target not created
+Build target 'Target 1'
+compiling main.c...
+SRC\MAIN.C(33): error C202: 'XBYTE': undefined identifier
+SRC\MAIN.C(34): error C202: 'XBYTE': undefined identifier
+SRC\MAIN.C(35): error C202: 'XBYTE': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling UsbApi.c...
+linking...
+Program Size: data=9.0 xdata=0 code=54
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+compiling UsbApi.c...
+SRC\USBAPI.C(5): error C202: 'USB2_Sofe_reset': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling UsbApi.c...
+SRC\USBAPI.C(37): error C202: 'CIS_SyncFIFO_thres': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling UsbApi.c...
+linking...
+Program Size: data=9.0 xdata=0 code=192
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+linking...
+Program Size: data=9.0 xdata=0 code=192
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+SRC\USBAPI.C(40): error C202: 'VbusInt': undefined identifier
+SRC\USBAPI.C(41): error C202: 'BusReset': undefined identifier
+SRC\USBAPI.C(42): error C202: 'BusSuspend': undefined identifier
+SRC\USBAPI.C(43): error C202: 'BusResume': undefined identifier
+SRC\USBAPI.C(44): error C202: 'PktRcv': undefined identifier
+SRC\USBAPI.C(45): error C202: 'BulkOutRcv': undefined identifier
+SRC\USBAPI.C(46): error C202: 'Abort': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling UsbApi.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  BUSSUSPEND
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  BUSRESUME
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  BUSRESET
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  VBUSINT
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  PKTRCV
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  BULKOUTRCV
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ABORT
+    MODULE:  UsbApi.obj (USBAPI)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  VBUSINT
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 0074H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  BUSRESET
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 0076H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  BUSSUSPEND
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 0078H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  BUSRESUME
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 007AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  PKTRCV
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 007CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  BULKOUTRCV
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 007EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ABORT
+    MODULE:  UsbApi.obj (USBAPI)
+    ADDRESS: 0080H
+Program Size: data=9.0 xdata=0 code=206
+"Cheddar" - 0 Error(s), 14 Warning(s).
+Build target 'Target 1'
+compiling global.c...
+linking...
+Program Size: data=10.0 xdata=0 code=206
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling isr.c...
+SRC\ISR.C(7): error C202: 'INT_VECTOR': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling isr.c...
+linking...
+Program Size: data=10.0 xdata=0 code=330
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+compiling isr.c...
+linking...
+Program Size: data=10.0 xdata=0 code=381
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling UsbLibPro.c...
+linking...
+Program Size: data=10.0 xdata=0 code=381
+"Cheddar" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+compiling UsbApi.c...
+compiling isr.c...
+compiling UsbLibPro.c...
+SRC\USBLIBPRO.C(17): warning C206: 'ctrlFIFORead': missing function-prototype
+SRC\USBLIBPRO.C(17): error C267: 'ctrlFIFORead': requires ANSI-style prototype
+SRC\USBLIBPRO.C(17): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(20): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(24): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(25): error C202: 'BR_GET_STATUS': undefined identifier
+SRC\USBLIBPRO.C(28): error C202: 'BR_CLEAR_FEATURE': undefined identifier
+SRC\USBLIBPRO.C(30): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBLIBPRO.C(32): error C202: 'BR_SET_FEATURE': undefined identifier
+SRC\USBLIBPRO.C(35): error C202: 'BR_SET_ADDRESS': undefined identifier
+SRC\USBLIBPRO.C(38): error C202: 'BR_GET_DESCRIPTOR': undefined identifier
+SRC\USBLIBPRO.C(41): error C202: 'BR_GET_CONFIGURATION': undefined identifier
+SRC\USBLIBPRO.C(44): error C202: 'BR_SET_CONFIGURATION': undefined identifier
+SRC\USBLIBPRO.C(47): error C202: 'BR_GET_INTERFACE': undefined identifier
+SRC\USBLIBPRO.C(50): error C202: 'BR_SET_INTERFACE': undefined identifier
+SRC\USBLIBPRO.C(68): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(69): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(72): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(75): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(83): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(91): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(92): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(94): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(96): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBLIBPRO.C(99): error C202: 'EP1_CTRL': undefined identifier
+SRC\USBLIBPRO.C(102): error C202: 'EP2_CTRL': undefined identifier
+SRC\USBLIBPRO.C(105): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(116): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(119): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBLIBPRO.C(120): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBLIBPRO.C(121): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBLIBPRO.C(123): error C202: 'USB_DONE': undefined identifier
+SRC\USBLIBPRO.C(128): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(129): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(132): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(133): error C202: 'BMR_REC_DEVICE': undefined identifier
+SRC\USBLIBPRO.C(134): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(135): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(138): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(141): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(145): error C202: 'BMR_REC_INTERFACE': undefined identifier
+SRC\USBLIBPRO.C(146): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(148): error C202: 'BMR_REC_ENDPOINT': undefined identifier
+SRC\USBLIBPRO.C(149): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(150): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(151): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(154): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(156): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBLIBPRO.C(159): error C202: 'EP1_CTRL': undefined identifier
+SRC\USBLIBPRO.C(160): error C202: 'ENP_TOG_CLR': undefined identifier
+SRC\USBLIBPRO.C(164): error C202: 'EP2_CTRL': undefined identifier
+SRC\USBLIBPRO.C(165): error C202: 'ENP_TOG_CLR': undefined identifier
+SRC\USBLIBPRO.C(168): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(171): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(175): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(177): error C202: 'USB_DONE': undefined identifier
+SRC\USBLIBPRO.C(182): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(183): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(186): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(187): error C202: 'BMR_REC_DEVICE': undefined identifier
+SRC\USBLIBPRO.C(188): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(190): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(191): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(192): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(195): error C202: 'TEST_MODE': undefined identifier
+SRC\USBLIBPRO.C(197): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(201): error C202: 'BMR_REC_INTERFACE': undefined identifier
+SRC\USBLIBPRO.C(202): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(204): error C202: 'BMR_REC_ENDPOINT': undefined identifier
+SRC\USBLIBPRO.C(205): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(206): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(207): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(210): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(212): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBLIBPRO.C(215): error C202: 'EP1_CTRL': undefined identifier
+SRC\USBLIBPRO.C(218): error C202: 'EP2_CTRL': undefined identifier
+SRC\USBLIBPRO.C(221): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(224): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(228): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(231): error C202: 'USB_DONE': undefined identifier
+SRC\USBLIBPRO.C(236): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(239): error C202: 'USB_STALL': undefined identifier
+SRC\USBLIBPRO.C(242): error C202: 'DEVICE0_ADDRESS': undefined identifier
+SRC\USBLIBPRO.C(243): error C202: 'Addressed': undefined identifier
+SRC\USBLIBPRO.C(245): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBLIBPRO.C(247): error C202: 'USB_DONE': undefined identifier
+SRC\USBLIBPRO.C(257): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(259): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(261): error C202: 'DS_DEVICE': undefined identifier
+SRC\USBLIBPRO.C(262): error C202: 'Ide_Dvc_Dlen': undefined identifier
+SRC\USBLIBPRO.C(263): error C202: 'Ide_Dvc_D': undefined identifier
+SRC\USBLIBPRO.C(264): error C202: 'CTRL_Buffer': undefined identifier
+SRC\USBLIBPRO.C(265): error C202: 'CTRL_Buffer': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling UsbApi.c...
+SRC\USBAPI.C(90): error C236: '_ctrlFIFORead': different length of parameter lists
+SRC\USBAPI.C(96): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(104): error C202: 'ENP_Interrupt_Restore_L': undefined identifier
+SRC\USBAPI.C(107): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(110): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(112): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(128): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(130): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(141): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(145): error C202: 'EP0_STATUS_H': undefined identifier
+SRC\USBAPI.C(147): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(156): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(159): error C202: 'EP0_CTRL': undefined identifier
+compiling isr.c...
+compiling UsbLibPro.c...
+Target not created
+Build target 'Target 1'
+compiling UsbApi.c...
+SRC\USBAPI.C(96): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(104): error C202: 'ENP_Interrupt_Restore_L': undefined identifier
+SRC\USBAPI.C(107): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(110): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(112): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(128): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(130): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(141): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(145): error C202: 'EP0_STATUS_H': undefined identifier
+SRC\USBAPI.C(147): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(156): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(159): error C202: 'EP0_CTRL': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling UsbApi.c...
+SRC\USBAPI.C(89): warning C280: 'len': unreferenced local variable
+SRC\USBAPI.C(128): error C202: 'EP0_CTRL': undefined identifier
+SRC\USBAPI.C(130): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(141): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(145): error C202: 'EP0_STATUS_H': undefined identifier
+SRC\USBAPI.C(147): error C202: 'DEV_STATUS': undefined identifier
+SRC\USBAPI.C(156): error C202: 'CONTROL_FIFO': undefined identifier
+SRC\USBAPI.C(159): error C202: 'EP0_CTRL': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling UsbApi.c...
+compiling isr.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=812
+"Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=812
+"Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=812
+"Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling global.c...
+compiling UsbLibPro.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=812
+"Cheddar" - 0 Error(s), 2 Warning(s).
+Clean started: Project: 'Cheddar'
+   deleting intermediate output files for target 'Target 1'
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling UsbApi.c...
+compiling global.c...
+compiling isr.c...
+compiling UsbLibPro.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=812
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=811
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=811
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=823
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling isr.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=818
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling isr.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=820
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=822
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+SRC\USBAPI.C(58): warning C280: 'START': unreferenced label
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=835
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+compiling UsbApi.c...
+SRC\USBAPI.C(58): warning C280: 'START': unreferenced label
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+Program Size: data=20.0 xdata=0 code=835
+creating hex file from ".\bin\Cheddar"...
+".\bin\Cheddar" - 0 Error(s), 3 Warning(s).

@@ -1,0 +1,449 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        01/16/2014  17:12:00  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE .\bin\STARTUP.obj, .\bin\main.obj, .\bin\UsbApi.obj, .\bin\global.obj, .\bin\isr.obj, .\bin\Usb
+>> LibPro.obj TO .\bin\Cheddar PRINT (.\lst\Cheddar.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\bin\STARTUP.obj (?C_STARTUP)
+  .\bin\main.obj (MAIN)
+  .\bin\UsbApi.obj (USBAPI)
+  .\bin\global.obj (GLOBAL)
+  .\bin\isr.obj (ISR)
+  .\bin\UsbLibPro.obj (USBLIBPRO)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CSTOPTR)
+
+
+LINK MAP OF MODULE:  .\bin\Cheddar (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0007H     UNIT         ?DT?_CTRLFIFOWRITE?USBAPI
+            DATA    000FH     0003H     UNIT         ?DT?_CTRLFIFOREAD?USBAPI
+                    0012H     000EH                  *** GAP ***
+            DATA    0020H     0001H     BIT_ADDR     ?BA?GLOBAL
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+            CODE    0006H     00B2H     UNIT         ?PR?_CTRLFIFOWRITE?USBAPI
+            CODE    00B8H     0098H     UNIT         ?PR?INITUSB2?USBAPI
+            CODE    0150H     0095H     UNIT         ?PR?_CTRLFIFOREAD?USBAPI
+            CODE    01E5H     0068H     UNIT         ?C?LIB_CODE
+            CODE    024DH     004FH     UNIT         ?PR?INTVECDECODE?ISR
+            CODE    029CH     003DH     UNIT         ?PR?INT0_ISR?ISR
+            CODE    02D9H     002CH     UNIT         ?PR?UPDATEUSB?USBAPI
+            CODE    0305H     0029H     UNIT         ?PR?INITC51?MAIN
+            CODE    032EH     000CH     UNIT         ?C_C51STARTUP
+            CODE    033AH     0006H     UNIT         ?PR?MAIN?MAIN
+            CODE    0340H     0003H     UNIT         ?PR?INITIAL_SUB?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\bin\Cheddar (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 2
+
+
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?INITIAL_SUB?MAIN
+  +--> ?PR?UPDATEUSB?USBAPI
+
+?PR?INITIAL_SUB?MAIN
+  +--> ?PR?INITC51?MAIN
+
+?PR?UPDATEUSB?USBAPI
+  +--> ?PR?INITUSB2?USBAPI
+
+*** NEW ROOT ***************************************************
+
+?PR?INT0_ISR?ISR
+  +--> ?PR?INTVECDECODE?ISR
+
+
+
+SYMBOL TABLE OF MODULE:  .\bin\Cheddar (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:032EH         SEGMENT       ?C_C51STARTUP
+  I:0021H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0331H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:032EH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:032EH         LINE#         133
+  C:0330H         LINE#         134
+  C:0331H         LINE#         135
+  C:0332H         LINE#         136
+  C:0334H         LINE#         185
+  C:0337H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 3
+
+
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  B:00B0H.0       PUBLIC        P3_0
+  D:00B8H         PUBLIC        IP
+  C:033AH         PUBLIC        main
+  D:0088H         PUBLIC        TCON
+  C:0305H         PUBLIC        InitC51
+  B:0088H.0       PUBLIC        IT0
+  C:0340H         PUBLIC        Initial_Sub
+  D:0098H         PUBLIC        SCON0
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:033AH         LINE#         6
+  C:033AH         LINE#         7
+  C:033AH         LINE#         8
+  C:033DH         LINE#         10
+  -------         ENDPROC       MAIN
+  -------         PROC          INITIAL_SUB
+  C:0340H         LINE#         13
+  C:0340H         LINE#         14
+  C:0340H         LINE#         15
+  -------         ENDPROC       INITIAL_SUB
+  -------         PROC          INITC51
+  C:0305H         LINE#         19
+  C:0305H         LINE#         20
+  C:0305H         LINE#         24
+  C:0307H         LINE#         27
+  C:030AH         LINE#         28
+  C:030DH         LINE#         29
+  C:030FH         LINE#         33
+  C:0315H         LINE#         34
+  C:031BH         LINE#         35
+  C:0321H         LINE#         37
+  C:0327H         LINE#         38
+  C:032DH         LINE#         39
+  -------         ENDPROC       INITC51
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        USBAPI
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  B:00A0H.3       PUBLIC        P2_3
+  B:00A0H.4       PUBLIC        P2_4
+  B:00A0H.5       PUBLIC        P2_5
+  D:00B8H         PUBLIC        IP
+  D:0088H         PUBLIC        TCON
+  C:02D9H         PUBLIC        UpdateUSB
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 4
+
+
+  C:0150H         PUBLIC        _ctrlFIFORead
+  D:0098H         PUBLIC        SCON0
+  C:0006H         PUBLIC        _ctrlFIFOWrite
+  C:00B8H         PUBLIC        InitUsb2
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          INITUSB2
+  C:00B8H         LINE#         3
+  C:00B8H         LINE#         4
+  C:00B8H         LINE#         5
+  C:00BFH         LINE#         6
+  C:00C3H         LINE#         7
+  C:00C6H         LINE#         10
+  C:00CCH         LINE#         11
+  C:00D2H         LINE#         14
+  C:00D9H         LINE#         15
+  C:00DDH         LINE#         16
+  C:00E3H         LINE#         19
+  C:00E8H         LINE#         20
+  C:00ECH         LINE#         21
+  C:00F0H         LINE#         22
+  C:00F4H         LINE#         23
+  C:00F8H         LINE#         24
+  C:00FEH         LINE#         25
+  C:0103H         LINE#         26
+  C:0107H         LINE#         27
+  C:010BH         LINE#         28
+  C:010FH         LINE#         29
+  C:0113H         LINE#         30
+  C:0117H         LINE#         31
+  C:011BH         LINE#         32
+  C:011FH         LINE#         33
+  C:0123H         LINE#         37
+  C:012AH         LINE#         40
+  C:012CH         LINE#         41
+  C:012EH         LINE#         42
+  C:0130H         LINE#         43
+  C:0132H         LINE#         44
+  C:0134H         LINE#         45
+  C:0136H         LINE#         46
+  C:0138H         LINE#         48
+  C:013FH         LINE#         49
+  C:0145H         LINE#         50
+  C:0149H         LINE#         51
+  C:014FH         LINE#         53
+  -------         ENDPROC       INITUSB2
+  -------         PROC          UPDATEUSB
+  -------         DO            
+  C:02DCH         SYMBOL        START
+  -------         ENDDO         
+  C:02D9H         LINE#         55
+  C:02D9H         LINE#         56
+  C:02D9H         LINE#         57
+  C:02DCH         LINE#         58
+  C:02DCH         LINE#         60
+  C:02E3H         LINE#         61
+  C:02E9H         LINE#         63
+  C:02E9H         LINE#         65
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 5
+
+
+  C:02EEH         LINE#         67
+  C:02F0H         LINE#         68
+  C:02F0H         LINE#         69
+  C:02F3H         LINE#         70
+  C:02F5H         LINE#         71
+  C:02F7H         LINE#         72
+  C:02F7H         LINE#         73
+  C:02FCH         LINE#         74
+  C:02FEH         LINE#         75
+  C:02FEH         LINE#         76
+  C:0303H         LINE#         78
+  C:0303H         LINE#         89
+  -------         ENDPROC       UPDATEUSB
+  -------         PROC          _CTRLFIFOREAD
+  D:000FH         SYMBOL        buf
+  -------         DO            
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:0150H         LINE#         95
+  C:0156H         LINE#         96
+  C:0156H         LINE#         100
+  C:0159H         LINE#         101
+  C:0170H         LINE#         103
+  C:017BH         LINE#         106
+  C:01C8H         LINE#         108
+  C:01C8H         LINE#         109
+  C:01CFH         LINE#         110
+  C:01CFH         LINE#         112
+  C:01D5H         LINE#         115
+  C:01DCH         LINE#         116
+  C:01DFH         LINE#         117
+  C:01E2H         LINE#         118
+  C:01E2H         LINE#         119
+  C:01E2H         LINE#         121
+  C:01E4H         LINE#         122
+  -------         ENDPROC       _CTRLFIFOREAD
+  -------         PROC          _CTRLFIFOWRITE
+  D:0008H         SYMBOL        len
+  D:000AH         SYMBOL        buf
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:000DH         SYMBOL        j
+  -------         ENDDO         
+  C:0006H         LINE#         126
+  C:0010H         LINE#         127
+  C:0010H         LINE#         128
+  C:0015H         LINE#         130
+  C:001CH         LINE#         131
+  C:001FH         LINE#         132
+  C:0022H         LINE#         133
+  C:0022H         LINE#         134
+  C:0022H         LINE#         136
+  C:002DH         LINE#         137
+  C:0030H         LINE#         138
+  C:0054H         LINE#         139
+  C:005FH         LINE#         141
+  C:006BH         LINE#         144
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 6
+
+
+  C:0072H         LINE#         145
+  C:0075H         LINE#         146
+  C:0078H         LINE#         147
+  C:0078H         LINE#         148
+  C:0078H         LINE#         149
+  C:0078H         LINE#         151
+  C:0084H         LINE#         152
+  C:00A8H         LINE#         153
+  C:00AFH         LINE#         155
+  C:00B5H         LINE#         157
+  C:00B7H         LINE#         158
+  -------         ENDPROC       _CTRLFIFOWRITE
+  -------         ENDMOD        USBAPI
+
+  -------         MODULE        GLOBAL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  B:0020H.3       PUBLIC        BusSuspend
+  D:00B8H         PUBLIC        IP
+  B:0020H.4       PUBLIC        BusResume
+  B:0020H.2       PUBLIC        BusReset
+  D:0088H         PUBLIC        TCON
+  B:0020H.1       PUBLIC        test_flag
+  D:0020H         PUBLIC        flag1
+  B:0020H.0       PUBLIC        VbusInt
+  B:0020H.5       PUBLIC        PktRcv
+  D:0098H         PUBLIC        SCON0
+  B:0020H.6       PUBLIC        BulkOutRcv
+  B:0020H.7       PUBLIC        Abort
+  D:00D0H         PUBLIC        PSW
+  -------         ENDMOD        GLOBAL
+
+  -------         MODULE        ISR
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:024DH         PUBLIC        IntVecDecode
+  B:00A0H.3       PUBLIC        P2_3
+  D:00B8H         PUBLIC        IP
+  C:029CH         PUBLIC        int0_isr
+  D:0088H         PUBLIC        TCON
+  D:0098H         PUBLIC        SCON0
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          INT0_ISR
+  C:029CH         LINE#         6
+  C:02B9H         LINE#         8
+  C:02BBH         LINE#         9
+  C:02BEH         LINE#         10
+  -------         ENDPROC       INT0_ISR
+  -------         PROC          INTVECDECODE
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 7
+
+
+  C:024DH         LINE#         12
+  C:024DH         LINE#         13
+  C:024DH         LINE#         14
+  C:0287H         LINE#         15
+  C:0287H         LINE#         16
+  C:0289H         LINE#         17
+  C:028AH         LINE#         18
+  C:028AH         LINE#         19
+  C:028CH         LINE#         20
+  C:028DH         LINE#         21
+  C:028DH         LINE#         22
+  C:028FH         LINE#         23
+  C:0290H         LINE#         24
+  C:0290H         LINE#         25
+  C:0292H         LINE#         26
+  C:0293H         LINE#         27
+  C:0293H         LINE#         28
+  C:0293H         LINE#         29
+  C:0293H         LINE#         30
+  C:0293H         LINE#         31
+  C:0293H         LINE#         32
+  C:0293H         LINE#         33
+  C:0293H         LINE#         34
+  C:0293H         LINE#         36
+  C:0293H         LINE#         37
+  C:0295H         LINE#         38
+  C:0296H         LINE#         39
+  C:0296H         LINE#         40
+  C:0298H         LINE#         41
+  C:0299H         LINE#         42
+  C:0299H         LINE#         43
+  C:0299H         LINE#         44
+  C:0299H         LINE#         45
+  C:0299H         LINE#         47
+  C:0299H         LINE#         48
+  C:0299H         LINE#         49
+  C:0299H         LINE#         50
+  C:029BH         LINE#         51
+  C:029BH         LINE#         52
+  C:029BH         LINE#         53
+  C:029BH         LINE#         54
+  C:029BH         LINE#         55
+  C:029BH         LINE#         56
+  C:029BH         LINE#         57
+  C:029BH         LINE#         58
+  C:029BH         LINE#         60
+  -------         ENDPROC       INTVECDECODE
+  -------         ENDMOD        ISR
+
+  -------         MODULE        USBLIBPRO
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/16/2014  17:12:00  PAGE 8
+
+
+  D:0088H         PUBLIC        TCON
+  D:0098H         PUBLIC        SCON0
+  D:00D0H         PUBLIC        PSW
+  -------         ENDMOD        USBLIBPRO
+
+  -------         MODULE        ?C?CLDPTR
+  C:01E5H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:01FEH         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CSTOPTR
+  C:022BH         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOREAD?USBAPI
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CTRLFIFOWRITE?USBAPI
+
+Program Size: data=20.0 xdata=0 code=835
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)
