@@ -14,15 +14,16 @@ void Initial_Sub()
 {
 	InitC51();
 
+	//InitCIS();
 }
 
 void InitC51(void)
 {
-#ifdef OV7675
+//#ifdef OV7675
 	P3_2 = 0;					// Pin 2 of port 3, used to control the power down pin of OV7675. 1 => power down;  0 => normal operation
-#else ifdef OV9155
-	P3_0 = 0;
-#endif
+//#else
+	//P3_0 = 0;
+//#endif
 
 	IE = 0x83;                  // ET0, EX0(USB), EX1(SATA) interrupt enable
 	IP = 0x01;                  // Set EX0 to higher priority

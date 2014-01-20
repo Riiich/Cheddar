@@ -1,0 +1,72 @@
+#include "platform.h"
+
+void I2C_Write_Data(unsigned char dev_addr, unsigned char sccb_addr, unsigned char sccb_data)
+{
+	XBYTE[Peripheral_1_CLK_CTRL] = 0x20;	// I2C_1 Clock 30MHz
+	
+	XBYTE[CIS_CTRL]				= 0x40;
+	XBYTE[I2C1_FIFO_CTRL]	= 0x00;
+	XBYTE[I2C1_SCL]				= 0xAA;
+
+	XBYTE[I2C1_CTRL_2551B]=0xE0;
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+ 	XBYTE[I2C1_CTRL_2551B]=0xC8;
+
+	XBYTE[I2C1_DATA_REG_2551B]=dev_addr;
+	
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+ 	XBYTE[I2C1_CTRL_2551B]=0xC8;
+
+ 	XBYTE[I2C1_DATA_REG_2551B]=sccb_addr;
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+ 	XBYTE[I2C1_CTRL_2551B]=0xC8;
+	
+ 	XBYTE[I2C1_DATA_REG_2551B]=sccb_data;
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+ 	XBYTE[I2C1_CTRL_2551B]	=0xC8;
+
+	XBYTE[I2C1_CTRL_2551B] 	= 0xD8;
+
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+	XBYTE[I2C1_CTRL_2551B] 	= 0xC8;
+}
+/*
+void I2C_Read_Data(word8 dev_addr, word8 sccb_addr1, word8 sccb_addr0)
+{
+	XBYTE[CIS_CTRL]        = 0x40;
+	XBYTE[I2C1_FIFO_CTRL]  = 0x00;
+	XBYTE[I2C1_SCL]        = 0x00;
+
+	XBYTE[I2C1_CTRL_2551B]=0xE0;
+	XBYTE[I2C1_DATA_REG_2551B]=dev_addr;
+
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+ 	XBYTE[I2C1_CTRL_2551B]=0xC8;
+	P1_0 = 0;
+ 	XBYTE[I2C1_DATA_REG_2551B]=sccb_addr1;
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+ 	XBYTE[I2C1_CTRL_2551B]=0xC8;
+
+	XBYTE[I2C1_DATA_REG_2551B]=sccb_addr0;
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+	XBYTE[I2C1_CTRL_2551B]=0xC8;
+	P1_1 = 0;
+
+	XBYTE[I2C1_CTRL_2551B]=0xE0;
+	XBYTE[I2C1_DATA_REG_2551B]=0x21;
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));	
+	
+	XBYTE[I2C1_CTRL_2551B]=0xC8;
+	P1_2 = 0;
+
+	P2 =  XBYTE[I2C1_DATA_REG_2551B];
+
+	XBYTE[I2C1_CTRL_2551B]=0xD8;
+
+ 	while(!(XBYTE[I2C1_CTRL_2551B]&0x08));
+	XBYTE[I2C1_CTRL_2551B]=0xC8;
+	P1_3 = 0;
+	XBYTE[I2C1_CTRL_2551B]=0x08;
+}
+*/
+

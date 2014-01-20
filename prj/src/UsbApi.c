@@ -33,6 +33,14 @@ void InitUsb2()
 	XBYTE[EP15_FIFO_SIZE_REG]= 0x00;
 
 
+//-----------Set Descriptors--------------
+// initial the pointer to the USB descriptor 
+	 //Con_Std_Descp = Ide_Con_Std_D;
+	 //InterfaceEP_Descp =  UVC_Std_D_H;
+	 //InterfaceEP_Oth_Descp = UVC_Std_D_F;
+//----------------------------------------
+
+
 	//Sync FIFO
 	XBYTE[0xFD8B] |=0x06;		// Choose the FIFO of endpoint 6 to be the input data buffer of CIS
 
@@ -50,6 +58,24 @@ void InitUsb2()
 	XBYTE[0xFC08] = 0xFF;		// enable ALL endpoint interrupts
 	XBYTE[0xFC06] = 0x0F;		// enable BusSuspend, BusResume, BusReset and VbusInt interrupts
 	
+}
+
+void ISO_TEST_1()
+{
+	
+//	XBYTE[ 	0xFF02 ] = 0x01;
+	XBYTE[ 	0xFF04 ] = 0x80;	
+ 	
+	XBYTE[ 	0xFCC4 ] = 0x1F;
+ 	XBYTE[ 	0xFCC5 ] = 0x00;
+
+	XBYTE[ 	0xFCC0 ] = 0x73;
+
+	XBYTE[ 	0xFCC1 ] = 0xE0;
+ 	XBYTE[ 	0xFCC2 ] = 0x09;
+	
+ 	XBYTE[ 	0xFCC3 ] = 0x20;	// non stop
+
 }
 
 void UpdateUSB()
@@ -74,18 +100,16 @@ START:
 			P2_5=0;
 		}
 		if(_testbit_(PktRcv)){
-//			controlCMD();
+			controlCMD();
 		}
-/*
+
 		if(DS_USB_VBUS_DETACH){
 			goto START;
 		}
-/*
 		if(GLOBAL_test) {
 			GLOBAL_test = 0;
-			ISO_TEST_1();
+			//ISO_TEST_1();
 		}
-		*/
 	}
 
 }

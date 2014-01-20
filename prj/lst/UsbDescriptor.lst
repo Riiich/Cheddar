@@ -1,0 +1,1080 @@
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE USBDESCRIPTOR
+OBJECT MODULE PLACED IN .\bin\UsbDescriptor.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE src\UsbDescriptor.c BROWSE DEBUG OBJECTEXTEND PRINT(.\lst\UsbDescriptor.lst
+                    -) TABS(2) OBJECT(.\bin\UsbDescriptor.obj)
+
+line level    source
+
+   1          #include "platform.h"
+   2          
+   3          //xdata unsigned char  *Con_Std_Descp, *InterfaceEP_Descp, *InterfaceEP_Oth_Descp;
+   4          
+   5          
+   6          
+   7          // Device Descriptor & Length for UVC
+   8          code unsigned char Ide_Dvc_D[] = {
+   9            0x12,     //  Length = 18 (0x12)
+  10            0x01,     //  Device Descriptor Type= 1
+  11            0x00,     //  USB Version L (.00) 
+  12            0x02,     //  USB Version H (2.)
+  13            0xEF,     //  Device Class (EF) Miscellaneous Device Class
+  14            0x02,     //  Device Sub Class (02) Common Class
+  15            0x01,     //  Device Protocol (01) Interface association descriptor ;EF 02 01 for Multi-Function Class cod
+             -e  Bruce
+  16            0x40,     //  Max Packet Size for EP0 = 64
+  17            0xBA,     //  Vendor ID Low 
+  18            0x05,     //  Vendor ID High (0x5BA)
+  19            0x0B,     //  Product ID Low
+  20            0x00,     //  Product ID High (0x000B)
+  21            0x01,     //  BCD Device Revision Low
+  22            0x01,     //  BCD Device Revision High (0x0001)
+  23            0x01,     //  Manufacturer String Index = 1
+  24            0x02,     //  Product String Index = 2
+  25            0x03,     //  Serial Number String = 3
+  26            0x01      //  Number of Configurations = 1
+  27          };
+  28          
+  29          // String Descriptor 0: Language ID
+  30          code unsigned char Ide_Str0_D[] = {
+  31              0x04,0x03,0x09,0x04
+  32          };
+  33          
+  34          // String Descriptor 1: Manufacturer string
+  35          code unsigned char Ide_Str1_D[] = {
+  36            0x28,0x03,
+  37            'D',0x00,'I',0x00,'G',0x00,'I',0x00,
+  38            'T',0x00,'A',0x00,'L',0x00,'P',0x00,
+  39            'E',0x00,'R',0x00,'S',0x00,'O',0x00,
+  40            'N',0x00,'A',0x00,' ',0x00,'I',0x00,
+  41            'n',0x00,'c',0x00,'.',0x00
+  42          };
+  43          
+  44          // String Descriptor 2, product string
+  45          code unsigned char Ide_Str2_D[] = {
+  46            0x2D,0x03,
+  47            'U',0x00,'.',0x00,'a',0x00,'r',0x00,
+  48            'e',0x00,'.',0x00,'U',0x00,' ',0x00,
+  49            '5',0x00,'X',0x00,'0',0x00,'0',0x00,
+  50            ' ',0x00,'P',0x00,'I',0x00,'V',0x00,
+  51            ' ',0x00,'S',0x00,'e',0x00,'n',0x00,
+  52            's',0x00,'o',0x00,'r',0x00
+  53          };
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 2   
+
+  54          
+  55          // String Descriptor 3: Serial string
+  56          code unsigned char Ide_Str3_D[] = {
+  57              0x04,0x03,'0',0x00
+  58          };
+  59          
+  60          // Device_Qualifier Descriptor
+  61          code unsigned char Ide_Dvc_QF_D[] = {
+  62              0x0A,0x06,0x00,0x02,0x00,0x00,0x00,0x40,
+  63              0x01,0x00
+  64          };
+  65          
+  66          // Configuration Descriptor & Length for UVC
+  67          code unsigned char UVC_Std_D[] = {
+  68            
+  69            /*  Configuration descriptor ******************************
+  70            //  NumInterface:             0x04 (4 interfaces)
+  71            //  ID ofthis Configuration:  0x01  
+  72            *********************************************************/
+  73            0x09,
+  74            0x02,
+  75            0x4B,
+  76            0x02,
+  77            0x04,
+  78            0x01,
+  79            0x00,
+  80            0x80,
+  81            0xFA,                       
+  82          
+  83            /********************************************************
+  84            // Descriptor type:  0x0B Standard Video Interface Collection IAD (INTERFACE ASSOCIATION DESCRIPTOR)
+  85            // FunctionClass:    0x0E (CC_VIDEO)
+  86            // FunctionSubClass: 0x03 (SC_VIDEO_INTERFACE_COLLECTION)
+  87            *********************************************************/
+  88            0x08,   // bLength - Size of this descriptor, in bytes: 8
+  89            0x0B,   // bDescriptorType - INTERFACE ASSOCIATION Descriptor.
+  90            0x00,   // bFirstInterface - Interface number of the first VideoControl interface that is associated with 
+             -this function.
+  91            0x02,   // bInterfaceCount - Number of contiguous VideoStreaming interfaces that are associated with this 
+             -function.
+  92            0x0E,   // bFunctionClass - CC_VIDEO. Video Interface Class code (assigned by the USB).
+  93            0x03,   // bFunctionSubClass - SC_VIDEO_INTERFACE_COLLECTION. Video Interface Subclass code.
+  94            0x00,   // bFunctionProtocol - Not used. Must be set to PC_PROTOCOL_UNDEFINED.
+  95            0x02,   // iFunction - Index of a string descriptor that describes this interface.  
+  96          
+  97          
+  98            /* Standard VC interface descriptor *********************
+  99            // Descriptor type:   INTERFACE
+ 100            // InterfaceNumber:   0x00  (Index of this interface)
+ 101            // AlternateSetting:  0x00
+ 102            // InterfaceClass:    0x0E (CC_VIDEO) 
+ 103            // InterfaceSubClass: 0x01 (SC_VIDEOCONTROL)
+ 104            // NumEndpoint:    0x01 (1 interrupt endpoint)
+ 105            *********************************************************/  
+ 106            0x09,   // bLength - Size of this descriptor, in bytes: 9
+ 107            0x04,   // bDescriptorType - INTERFACE descriptor type
+ 108            0x00,   // bInterfaceNumber - Number of interface. A zero-based value identifying the index in the array o
+             -f concurrent interfaces supported by this configuration.
+ 109            0x00,   // bAlternateSetting - Value used to select an alternate setting for the interface identified in t
+             -he prior field.
+ 110            0x01,   // bNumEndpoints - Number of endpoints used by this interface (excluding endpoint 0). This number 
+             -is 0 or 1.
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 3   
+
+ 111            0x0E,   // bInterfaceClass - CC_VIDEO. Video Interface Class code (assigned by the USB).
+ 112            0x01,   // bInterfaceSubClass - SC_VIDEOCONTROL. Video Interface Subclass code. 
+ 113            0x00,   // Must be set to PC_PROTOCOL_15.
+ 114            0x02,   // Index of a string descriptor that describes this interface.
+ 115            
+ 116            
+ 117            /* Class-specific VC interface descriptor ***************
+ 118            // Descriptor type:     CS_INTERFACE
+ 119            // Descriptor subtype:  VC_HEADER
+ 120            // Number of streaming interface: 0x01
+ 121            *********************************************************/    
+ 122            0x0D,   // bLength - Size of this descriptor, in bytes: 12+n
+ 123            0x24,   // bDescriptorType - CS_INTERFACE descriptor type
+ 124            0x01,   // bDescriptorSubType- VC_HEADER descriptor subtype     
+ 125            0x00,   // bcdUVC - Byte 1 - Video Device Class Specification release number in binary-coded decimal. 
+ 126            0x01,   // bcdUVC - Byte 2 - Video Device Class Specification release number in binary-coded decimal. 
+ 127            0x4F,   // wTotalLength - Byte 1 - Total number of bytes returned for the class-specific VideoControl inte
+             -rface descriptor.
+ 128            0x00,   // wTotalLength - Byte 2 - Total number of bytes returned for the class-specific VideoControl inte
+             -rface descriptor.
+ 129            0x80,   // dwClockFrequency Byte 1 - ?? Use of this field has been deprecated. The device clock frequency 
+             -in Hz.
+ 130            0xC3,   // dwClockFrequency Byte 2 - Use of this field has been deprecated.
+ 131            0xC9,   // dwClockFrequency Byte 3 - Use of this field has been deprecated.
+ 132            0x01,   // dwClockFrequency Byte 4 - Use of this field has been deprecated.
+ 133            0x01,   // bInCollection - The number of VideoStreaming interfaces in the Video Interface Collection to wh
+             -ich this VideoControl interface belongs: n
+ 134            0x01,   // baInterfaceNr(1) - Interface number of the first VideoStreaming interface in the Collection
+ 135            
+ 136            
+ 137            /* Input Terminal descriptor *****************************
+ 138            //  Descriptor type:     CS_INTERFACE,
+ 139            //  Descriptor subtype:  VC_INPUT_TERMINAL type
+ 140            //  ID of this terminal: 1
+ 141            //  Terminal type:       ITT_CAMERA
+ 142            *********************************************************/
+ 143            0x12,   // bLength - Size of this descriptor, in bytes: 8 (+x)
+ 144            0x24,   // bDescriptorType - CS_INTERFACE descriptor type
+ 145            0x02,   // bDescriptorSubtype - VC_INPUT_TERMINAL descriptor subtype
+ 146            0x01,   // bTerminalID - A non-zero constant that uniquely identifies the Terminal within the video functi
+             -on.
+ 147            0x01,   // wTerminalType - Byte 1 Constant that characterizes the type of Terminal. This is set to the ITT
+             -_CAMERA value.
+ 148            0x02,   // wTerminalType - Byte 2 Constant that characterizes the type of Terminal. This is set to the ITT
+             -_CAMERA value.
+ 149            0x00,   // bAssocTerminal - ID of the Output Terminal to which this Input Terminal is associated.
+ 150            0x00,   // iTerminal - Index of a string descriptor that describes the Camera Terminal.
+ 151            0x00,   // Depending on the Terminal type, certain Input 
+ 152            0x00,   // Terminal descriptors have additional fields.    
+ 153            0x00,   // The descriptors for these special 
+ 154            0x00,   // Terminal types are described in 
+ 155            0x00,   // separate sections specific to 
+ 156            0x00,   // those Terminals, 
+ 157            0x03,   // and in 
+ 158            0x0A,   // accompanying 
+ 159            0x00,   // documents.
+ 160            0x00,   //
+ 161          
+ 162            
+ 163            /* Processing Unit ***************************************
+ 164            // Descriptor type:    CS_INTERFACE
+ 165            // Descriptor subtype: VC_PROCESSING_UNIT
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 4   
+
+ 166            // ID ofthis unit:     2
+ 167            *********************************************************/
+ 168            0x0B,   // bLength - Size of this descriptor, in bytes: 9 (+x)
+ 169            0x24,   // bDescriptorType - CS_INTERFACE descriptor type
+ 170            0x05,   // bDescriptorSubType- VC_PROCESSING_UNIT descriptor subtype
+ 171            0x02,   // bUnitID - A non-zero constant that uniquely identifies the Terminal within the video function.
+ 172            0x01,   // bSourceID - ID of the Unit or Terminal to which this Unit is connected.
+ 173            0x00,   // wMaxMultiplier - Byte 1 If the Digital Multiplier control is supported, this field indicates th
+             -e maximum digital magnification, multiplied by 100.
+ 174            0x00,   // wMaxMultiplier - Byte 2 If the Digital Multiplier control is supported, this field indicates th
+             -e maximum digital magnification, multiplied by 100.
+ 175            0x02,   // bControlSize - Size of the bmControls field, in bytes: 3
+ 176            0x7F,   // bmControls - A bit set to 1 indicates that the mentioned Control is supported for the video str
+             -eam.
+ 177            0x17,   // iProcessing - Index of a string descriptor that describes this processing unit.
+ 178            0x00,   // bmVideoStandards - A bitmap of all analog video standards supported by the Processing Unit.
+ 179            
+ 180            
+ 181            /* Output Terminal descriptor ****************************
+ 182            // Descriptor type:     CS_INTERFACE
+ 183            // Descriptor subtype:  VC_OUTPUT_TERMINAL type
+ 184            // ID ofthis unit:      3
+ 185            // Terminal type:       TT_STREAMING
+ 186            *********************************************************/
+ 187            0x09,   // bLength - Size of this descriptor, in bytes: 18
+ 188            0x24,   // bDescriptorType - CS_INTERFACE descriptor type
+ 189            0x03,   // bDescriptorSubtype - VC_OUTPUT_TERMINAL descriptor subtype
+ 190            0x03,   // bTerminalID - A non-zero constant that uniquely identifies the Terminal within the video funct
+             -ion.
+ 191            0x01,   // wTerminalType - Byte 1 Constant that characterizes the type of Terminal.
+ 192            0x01,   // wTerminalType - Byte 2 Constant that characterizes the type of Terminal.
+ 193            0x00,   // bAssocTerminal - Constant, identifying the Input Terminal to which this Output Terminal is ass
+             -ociated, or zero (0) if no such association exists.
+ 194            0x02,   // bSourceID - ID of the Unit or Terminal to which this Terminal is connected.
+ 195            0x00,   // iTerminal - Index of a string descriptor, describing the Output Terminal.
+ 196          
+ 197            
+ 198            0x1C,0x24,0x06,0x04,0x5D,0xC7,0x17,0xA9,0x19,0x41,0xDA,0x11,0xAE,0x0E,// Extension Unit descriptor
+ 199            0x00,0x0D,0x56,0xAC,0x7B,0x4C,0x08,0x01,0x01,0x03,0x59,0x80,0x80,0x00, // Descriptor type:    CS_INTERFAC
+             -E
+ 200                                                                                   // Descriptor subtype: VC_EXTENSIO
+             -N_UNIT
+ 201                                                                                   
+ 202          
+ 203          
+ 204          
+ 205            0x07,0x05,0x84,0x03,0x0A,0x00,0x05,          // Standard Interrupt Endpoint Descriptor
+ 206                                     // Descriptor type:  ENDPOINT
+ 207                                     // Endpoint address: 0x81== (IN endpoint 1)
+ 208                                     // bmAttributes:     0x03 (Interrupt)
+ 209          
+ 210              
+ 211            0x05,0x25,0x03,0x0A,0x00,            //Class-specific interrupt endpoint Descriptor
+ 212                                    // Descriptor type:    CS_ENDPOINT
+ 213                                    // Descriptor subtype: EP_INTERRUPT
+ 214          
+ 215            
+ 216            
+ 217            
+ 218            0x09,0x04,0x01,0x00,0x00,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 0)
+ 219                                    // Descriptor type:   INTERFACE
+ 220                                    // InterfaceNumber:   0x01 (index of this interface)
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 5   
+
+ 221                                    // AlternateSetting:  0x00 (index of this Alternate Setting)
+ 222                                    // NumEndpoint:       0x00
+ 223                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 224                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 225          
+ 226          
+ 227            0x0E,0x24,0x01,0x01,0xDF,0x00,0x86,0x00,0x03,0x02,0x01,0x01,0x01,0x00, // Class-specific VS header descri
+             -ptor
+ 228                                                // Descriptor type:    0x24 (CS_INTERFACE)
+ 229                                                // Descriptor subtype: 0x01 (VS_INPUT_HEADER)
+ 230                                                // EndpointAddress:    0x82 ==(Address of the iso endpoint)
+ 231                                                // StillCaptureMethod: 0x02 (Method 2)
+ 232          
+ 233            0x1B,0x24,0x04,0x01,0x05,0x59,0x55,0x59,0x32,0x00,0x00,0x10,0x00,    // Class-specific VS format descript
+             -or
+ 234            0x80,0x00,0x00,0xAA,0x00,0x38,0x9B,0x71,0x10,0x01,0x00,0x00,0x00,0x00,  // Descriptor type:    0x24 (CS_I
+             -NTERFACE)
+ 235                                                // Descriptor subtype: 0x04 (VS_FORMAT_UNCOMPRESSED)                              
+ 236                                                // NumFrameDescriptor: 0x05 (5 frams descriptors)
+ 237          
+ 238          /*
+ 239            0x1B,0x24,0x04,0x01,0x05,0x7D,0xEB,0x36,0xE4,0x4F,0x52,0xCE,0x11,    // Class-specific VS format descript
+             -or
+ 240            0x9F,0x53,0x00,0x20,0xAF,0x0B,0xA7,0x70,0x10,0x01,0x00,0x00,0x00,0x00,  // Descriptor type:    0x24 (CS_I
+             -NTERFACE)
+ 241                                                // Descriptor subtype: 0x04 (VS_FORMAT_UNCOMPRESSED)                              
+ 242                                                // NumFrameDescriptor: 0x05 (5 frams descriptors)
+ 243                                                                                      // guidFormat:         3259555
+             -9-0000-0010-8000-00aa00389b71 (bit5~20)
+ 244                                                                                      // bBitsPerPixel:      16 (bit
+             - 21) 0x10
+ 245          */
+ 246          
+ 247          
+ 248          
+ 249            0x1E,0x24,0x05,0x01,0x00,0x80,0x02,0xE0,0x01,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 250            0xB8,0x0B,0x00,0x60,0x09,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 251                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 252                                                   // 1st frame descriptor
+ 253            
+ 254            0x1E,0x24,0x05,0x02,0x00,0x60,0x01,0x20,0x01,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 255            0xB8,0x0B,0x00,0x18,0x03,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 256                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 257                                                   // 2nd frame descriptor
+ 258            
+ 259            0x1E,0x24,0x05,0x03,0x00,0x40,0x01,0xF0,0x00,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 260            0xB8,0x0B,0x00,0x58,0x02,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 261                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 262                                                   // 3rd frame descriptor
+ 263             
+ 264              0x1E,0x24,0x05,0x04,0x00,0xB0,0x00,0x90,0x00,0x00,0x00,0xB8,0x0B,0x00,0x00,  //   Class-specific VS fr
+             -ame descriptor
+ 265              0xB8,0x0B,0x00,0xC6,0x00,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x
+             -24 (CS_INTERFACE)
+ 266                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 267                                                   // 4th frame descriptor
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 6   
+
+ 268          
+ 269            0x1E,0x24,0x05,0x05,0x00,0xA0,0x00,0x78,0x00,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 270            0xB8,0x0B,0x00,0x96,0x00,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 271                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 272                                                   // 5th frame descriptor
+ 273            
+ 274            0x1A,0x24,0x03,0x00,0x05,0x80,0x02,0xE0,0x01,0x60,0x01,0x20,0x01, // Class-specific Still Image descripto
+             -r
+ 275            0x40,0x01,0xF0,0x00,0xB0,0x00,0x90,0x00,0xA0,0x00,0x78,0x00,0x00,  // Descriptor type:    0x24 (CS_INTERF
+             -ACE)
+ 276                                               // Descriptor subtype: 0x03 (VS_STILL_IMAGE_FRAME)
+ 277                                                 // EndpointAdress:     0x00 (still image capture method 2 set to zero)
+ 278          
+ 279          
+ 280            
+ 281            0x06,0x24,0x0D,0x00,0x00,0x00,   //Class-specific color matching descriptor
+ 282                              // Descriptor type:    0x24 (CS_INTERFACE)
+ 283                                  // Descriptor subtype: 0x0D (VS_COLORFORMAT)
+ 284          
+ 285          
+ 286            0x09,0x04,0x01,0x01,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 287                                    // Descriptor type:   INTERFACE
+ 288                                    // InterfaceNumber:   0x01 (index of this interface)
+ 289                                    // AlternateSetting:  0x01 (index of this Alternate Setting)
+ 290                                    // NumEndpoint:       0x01
+ 291                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 292                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 293          
+ 294            
+ 295            0x07,0x05,0x86,0x05,0x80,0x00,0x01,   // Standard VS isochronous video data endpoint descriptor
+ 296                                 // Descriptor type:   0x05 (ENDPOINT)
+ 297                                 // EndpointAddress:   0x82== (IN endpoint 2)
+ 298                                 // Attributes:        0x05 (Isochronous transfer type)               
+ 299          
+ 300            
+ 301            0x09,0x04,0x01,0x02,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 302                                    // Descriptor type:   INTERFACE
+ 303                                    // InterfaceNumber:   0x01 (index of this interface)
+ 304                                    // AlternateSetting:  0x02 (index of this Alternate Setting)
+ 305                                    // NumEndpoint:       0x01
+ 306                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 307                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 308            
+ 309            0x07,0x05,0x86,0x05,0x00,0x02,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 310                                 // Descriptor type:   0x05 (ENDPOINT)
+ 311                                 // EndpointAddress:   0x82== (IN endpoint 2)
+ 312                                 // Attributes:        0x05 (Isochronous transfer type)
+ 313            
+ 314            0x09,0x04,0x01,0x03,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 315                                    // Descriptor type:   INTERFACE
+ 316                                    // InterfaceNumber:   0x01 (index of this interface)
+ 317                                    // AlternateSetting:  0x03 (index of this Alternate Setting)
+ 318                                    // NumEndpoint:       0x01
+ 319                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 320                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 321            
+ 322            0x07,0x05,0x86,0x05,0x00,0x04,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 323                                 // Descriptor type:   0x05 (ENDPOINT)
+ 324                                 // EndpointAddress:   0x82== (IN endpoint 2)
+ 325                                 // Attributes:        0x05 (Isochronous transfer type)
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 7   
+
+ 326            
+ 327            0x09,0x04,0x01,0x04,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 328                                    // Descriptor type:   INTERFACE
+ 329                                    // InterfaceNumber:   0x01 (index of this interface)
+ 330                                    // AlternateSetting:  0x04 (index of this Alternate Setting)
+ 331                                    // NumEndpoint:       0x01
+ 332                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 333                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 334            
+ 335            0x07,0x05,0x86,0x05,0x00,0x0B,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 336                                 // Descriptor type:   0x05 (ENDPOINT)
+ 337                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 338                                 // Attributes:        0x05 (Isochronous transfer type)
+ 339            
+ 340            0x09,0x04,0x01,0x05,0x01,0x0E,0x02,0x00,0x00, //Standard VS interface Descriptor (Alternate Setting 1)
+ 341                                    // Descriptor type:   INTERFACE
+ 342                                    // InterfaceNumber:   0x01 (index of this interface)
+ 343                                    // AlternateSetting:  0x05 (index of this Alternate Setting)
+ 344                                    // NumEndpoint:       0x01
+ 345                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 346                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 347            
+ 348            0x07,0x05,0x86,0x05,0x00,0x0C,0x01,   // Standard VS isochronous video data endpoint descriptor
+ 349                                 // Descriptor type:   0x05 (ENDPOINT)
+ 350                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 351                                 // Attributes:        0x05 (Isochronous transfer type)
+ 352            
+ 353            0x09,0x04,0x01,0x06,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 354                                    // Descriptor type:   INTERFACE
+ 355                                    // InterfaceNumber:   0x01 (index of this interface)
+ 356                                    // AlternateSetting:  0x06 (index of this Alternate Setting)
+ 357                                    // NumEndpoint:       0x01
+ 358                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 359                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 360            
+ 361            0x07,0x05,0x86,0x05,0x80,0x13,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 362                                 // Descriptor type:   0x05 (ENDPOINT)
+ 363                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 364                                 // Attributes:        0x05 (Isochronous transfer type)
+ 365            
+ 366            0x09,0x04,0x01,0x07,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 367                                    // Descriptor type:   INTERFACE
+ 368                                    // InterfaceNumber:   0x01 (index of this interface)
+ 369                                    // AlternateSetting:  0x07 (index of this Alternate Setting)
+ 370                                    // NumEndpoint:       0x01
+ 371                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 372                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 373            
+ 374            0x07,0x05,0x86,0x05,0x00,0x14,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 375                                 // Descriptor type:   0x05 (ENDPOINT)
+ 376                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 377                                 // Attributes:        0x05 (Isochronous transfer type)
+ 378          
+ 379            
+ 380          
+ 381           // Audio
+ 382            0x08,0x0B,0x02,0x02,0x01,0x02,0x00,0x03,  //  Descriptor type:   INTERFACE
+ 383                                   // InterfaceNumber:   0x02 (Index of this interface)
+ 384                                   // AlternateSetting:  0x00
+ 385            
+ 386            0x09,0x04,0x02,0x00,0x00,0x01,0x01,0x00,0x03, // USB Microphone Standard AC Interface descriptor
+ 387                                                             // Descriptor type:   INTERFACE
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 8   
+
+ 388                                     // InterfaceNumber:   0x02 (Index of this interface)
+ 389                                     // AlternateSetting:  0x00
+ 390                                     // InterfaceClass:    0x01 (Audio) 
+ 391                                     // InterfaceSubClass: 0x01 (AUDIO_CINTROL)
+ 392                                     // NumEndpoint:     0x00 
+ 393            
+ 394            0x09,0x24,0x01,0x00,0x01,0x27,0x00,0x01 ,0x03,  // USB Microphone Class-specific AC Interface Descriptor
+ 395                                       // Descriptor type:               CS_INTERFACE
+ 396                                     // Descriptor subtype:            HEADER
+ 397                                     // Number of Streaming Interface: 0x01
+ 398                                      
+ 399            
+ 400            0x0C,0x24,0x02,0x01,0x01,0x02,0x00,0x01,0x00,0x00,0x00,0x00,// USB Microphone Input Terminal Descriptor
+ 401                                                                         // Descriptor type:       0x24 (CS_INTERFACE
+             -)
+ 402                                                 // Descriptor subtype:    0x02 (INPUT_TERMINAL)
+ 403                                           // TerminalType:      0x0201 (Microphone)
+ 404                                           // TerminalId:        0x01
+ 405            
+ 406            0x09,0x24,0x06,0x02,0x01,0x01,0x00,0x03,0x00, // FEATURE_UNIT Descriptor
+ 407                                                             // Descriptor type:       0x24 (CS_INTERFACE)
+ 408                                     // Descriptor subtype:    0x06 (FEATURE_UNIT)
+ 409                                     // UnitId:          0x02
+ 410                                    
+ 411          
+ 412            
+ 413            0x09,0x24,0x03,0x03,0x01,0x01,0x01,0x02,0x00, // USB Microphone Output Terminal Descriptor
+ 414                                                            // Descriptor type:       0x24 (CS_INTERFACE)
+ 415                                    // Descriptor subtype:    0x03 (OUTPUT_TERMINAL)
+ 416                                    // TerminalId:        0x03
+ 417                                    
+ 418            
+ 419            0x09,0x04,0x03,0x00,0x00,0x01,0x02,0x00,0x00,   // USB Microphone Standard AS Interface Descriptor (Alt. 
+             -Set. 0) 
+ 420                                                             // Descriptor type:   INTERFACE
+ 421                                     // InterfaceNumber:   0x03 (Index of this interface)
+ 422                                     // AlternateSetting:  0x00
+ 423                                     // InterfaceClass:    0x01 (AUDIO) 
+ 424                                     // InterfaceSubClass: 0x02 (AUDIO_STREAMING)
+ 425                                     // NumEndpoint:     0x00 
+ 426            
+ 427            0x09,0x04,0x03,0x01,0x01,0x01,0x02,0x00,0x00, // USB Microphone Standard AS Interface Descriptor (Alt. Se
+             -t. 1) 
+ 428                                                            // Descriptor type:   INTERFACE
+ 429                                    // InterfaceNumber:   0x03  (Index of this interface)
+ 430                                    // AlternateSetting:  0x01
+ 431                                    // InterfaceClass:    0x01 (AUDIO) 
+ 432                                    // InterfaceSubClass: 0x02 (AUDIO_STREAMING)
+ 433                                    // NumEndpoint:    0x01
+ 434            
+ 435            0x07,0x24,0x01,0x03,0x01,0x01,0x00,        // USB Microphone Class-specific AS General Interface Descriptor
+ 436                                                            // Descriptor type:   0x24 (CS_INTERFACE)
+ 437                                    // DescriptorSubType: 0x01 (GENERAL)
+ 438                                  
+ 439            
+ 440            0x1D,0x24,0x02,0x01,0x01,0x02,0x10,0x07,0x40,0x1F,0x00,0x11,0x2B,0x00,0x80,  // USB Microphone Type I For
+             -mat Type Descriptor
+ 441            0x3E,0x00,0x22,0x56,0x00,0x00,0x7D,0x00,0x44,0xAC,0x00,0x80,0xBB,0x00,          // Descriptor type:   0x2
+             -4 (CS_INTERFACE)
+ 442                                                                    // DescriptorSubType: 0x02 (FORMAT_TYPE_I)
+ 443          
+ 444            
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 9   
+
+ 445            
+ 446            0x09,0x05,0x85,0x01,0x62,0x00,0x04,0x00,0x00,  // USB Microphone Standard Endpoint Descriptor 
+ 447                                                            // Descriptor type:   Endpoint
+ 448                                    // EndpointAdress:    0x83== (IN endpoint 3)
+ 449                                    // Attributes:        0x01 (iso)
+ 450            
+ 451            0x07,0x25,0x01,0x01,0x00,0x00,0x00        // Descriptor type:    CS_Endpoint
+ 452                                    // DescriptorSubType:  0x01 (GENERAL)
+ 453          };
+ 454          
+ 455          /*
+ 456          //-----------------Based on Prolific 20130805--------------------//
+ 457          // Device Descriptor for UVC
+ 458          code unsigned char Ide_Dvc_D[] = {
+ 459            0x12,     //  Length = 18 (0x12)
+ 460            0x01,     //  Device Descriptor Type= 1
+ 461            0x00,     //  USB Version L (.00) 
+ 462            0x02,     //  USB Version H (2.)
+ 463            0xEF,     //  Device Class (EF) Miscellaneous Device Class
+ 464            0x02,     //  Device Sub Class (02) Common Class
+ 465            0x01,     //  Device Protocol (01) Interface association descriptor ;EF 02 01 for Multi-Function Class cod
+             -e  Bruce
+ 466            0x40,     //  Max Packet Size for EP0 = 64
+ 467            0xBA,     //  Vendor ID Low 
+ 468            0x05,     //  Vendor ID High (0x5BA)
+ 469            0x0B,     //  Product ID Low
+ 470            0x00,     //  Product ID High (0x000B)
+ 471            0x01,     //  BCD Device Revision Low
+ 472            0x01,     //  BCD Device Revision High (0x0001)
+ 473            0x01,     //  Manufacturer String Index = 1
+ 474            0x02,     //  Product String Index = 2
+ 475            0x03,     //  Serial Number String = 3
+ 476            0x01      //  Number of Configurations = 1
+ 477          };
+ 478          
+ 479          // PL2570 Device Descriptor for Mass Storage device
+ 480          code unsigned char Ide_Dvc_D_2570[] = {
+ 481              0x12,0x01,0x00,0x02,0x00,0x00,0x00,0x40,
+ 482              0x7B,0x06,0x71,0x27,0x00,0x01,0x01,0x02,
+ 483              0x03,0x01
+ 484          };
+ 485          
+ 486          
+ 487          
+ 488          // UVC configuration Descriptor
+ 489          code unsigned char UVC_Std_D_H[] = {
+ 490              0x09,0x02,0x4B,0x02,0x04,0x01,0x00,0x80,0xFA, // Configuration descriptor
+ 491                                    //  Descriptor type:          Configuration
+ 492                                                            //  NumInterface:             0x04 (4 interfaces)
+ 493                                                            //  ID ofthis Configuration:  0x01                        
+ 494          
+ 495          
+ 496            0x08,0x0B,0x00,0x02,0x0E,0x03,0x00,0x02,    // Standard Video Interface Collection IAD
+ 497                                                             // Descriptor type:  0x0B (INTERFACE ASSOCIATION DESCRIP
+             -TOR)
+ 498                                     // FunctionClass:    0x0E (CC_VIDEO)
+ 499                                                             // FunctionSubClass: 0x03 (SC_VIDEO_INTERFACE_COLLECTION
+             -)
+ 500          
+ 501          
+ 502            0x09,0x04,0x00,0x00,0x01,0x0E,0x01,0x00,0x02, // Standard VC interface descriptor 
+ 503                                                             // Descriptor type:   INTERFACE
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 10  
+
+ 504                                     // InterfaceNumber:   0x00 (Index of this interface)
+ 505                                     // AlternateSetting:  0x00
+ 506                                     // InterfaceClass:    0x0E (CC_VIDEO) 
+ 507                                     // InterfaceSubClass: 0x01 (SC_VIDEOCONTROL)
+ 508                                     // NumEndpoint:     0x01 (1 interrupt endpoint)
+ 509            
+ 510            0x0D,0x24,0x01,0x00,0x01,0x4F,0x00,0x80,0xC3,0xC9,0x01,0x01,0x01,// Class-specific VC interface descripto
+             -r
+ 511                                              // Descriptor type:               CS_INTERFACE
+ 512                                              // Descriptor subtype:            VC_HEADER
+ 513                                              // Number of streaming interface: 0x01
+ 514            
+ 515            0x12,0x24,0x02,0x01,0x01,0x02,0x00,0x00,0x00, // Input Terminal descriptor,
+ 516            0x00,0x00,0x00,0x00,0x00,0x03,0x0A,0x00,0x00,    //  Descriptor type:     CS_INTERFACE,
+ 517                                                               //  Descriptor subtype:  VC_INPUT_TERMINAL type
+ 518                                                               //  ID of this terminal: 1
+ 519                                       //  Terminal type:       ITT_CAMERA
+ 520          
+ 521            
+ 522            0x0B,0x24,0x05,0x02,0x01,0x00,0x00,0x02,0x7F,0x17,0x00, // Processing Unit
+ 523                                          // Descriptor type:    CS_INTERFACE
+ 524                                          // Descriptor subtype: VC_PROCESSING_UNIT
+ 525                                          // ID ofthis unit:     2
+ 526            
+ 527            0x09,0x24,0x03,0x03,0x01,0x01,0x00,0x02,0x00, // Output Terminal descriptor, 
+ 528                                      // Descriptor type:     CS_INTERFACE
+ 529                                      // Descriptor subtype:  VC_OUTPUT_TERMINAL type
+ 530                                                              // ID ofthis unit:      3
+ 531                                      // Terminal type:       TT_STREAMING
+ 532          
+ 533            
+ 534            0x1C,0x24,0x06,0x04,0x5D,0xC7,0x17,0xA9,0x19,0x41,0xDA,0x11,0xAE,0x0E,// Extension Unit descriptor
+ 535            0x00,0x0D,0x56,0xAC,0x7B,0x4C,0x08,0x01,0x01,0x03,0x59,0x80,0x80,0x00, // Descriptor type:    CS_INTERFAC
+             -E
+ 536                                                                                   // Descriptor subtype: VC_EXTENSIO
+             -N_UNIT
+ 537                                                                                   
+ 538          
+ 539          
+ 540          
+ 541            0x07,0x05,0x84,0x03,0x0A,0x00,0x05,          // Standard Interrupt Endpoint Descriptor
+ 542                                     // Descriptor type:  ENDPOINT
+ 543                                     // Endpoint address: 0x81== (IN endpoint 1)
+ 544                                     // bmAttributes:     0x03 (Interrupt)
+ 545          
+ 546              
+ 547            0x05,0x25,0x03,0x0A,0x00,            //Class-specific interrupt endpoint Descriptor
+ 548                                    // Descriptor type:    CS_ENDPOINT
+ 549                                    // Descriptor subtype: EP_INTERRUPT
+ 550          
+ 551            
+ 552            
+ 553            
+ 554            0x09,0x04,0x01,0x00,0x00,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 0)
+ 555                                    // Descriptor type:   INTERFACE
+ 556                                    // InterfaceNumber:   0x01 (index of this interface)
+ 557                                    // AlternateSetting:  0x00 (index of this Alternate Setting)
+ 558                                    // NumEndpoint:       0x00
+ 559                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 560                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 561          
+ 562          
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 11  
+
+ 563            0x0E,0x24,0x01,0x01,0xDF,0x00,0x86,0x00,0x03,0x02,0x01,0x01,0x01,0x00, // Class-specific VS header descri
+             -ptor
+ 564                                                // Descriptor type:    0x24 (CS_INTERFACE)
+ 565                                                // Descriptor subtype: 0x01 (VS_INPUT_HEADER)
+ 566                                                // EndpointAddress:    0x82 ==(Address of the iso endpoint)
+ 567                                                // StillCaptureMethod: 0x02 (Method 2)
+ 568          
+ 569            0x1B,0x24,0x04,0x01,0x05,0x59,0x55,0x59,0x32,0x00,0x00,0x10,0x00,    // Class-specific VS format descript
+             -or
+ 570            0x80,0x00,0x00,0xAA,0x00,0x38,0x9B,0x71,0x10,0x01,0x00,0x00,0x00,0x00,  // Descriptor type:    0x24 (CS_I
+             -NTERFACE)
+ 571                                                // Descriptor subtype: 0x04 (VS_FORMAT_UNCOMPRESSED)                              
+ 572                                                // NumFrameDescriptor: 0x05 (5 frams descriptors)
+ 573          
+ 574          /**-/
+ 575            0x1B,0x24,0x04,0x01,0x05,0x7D,0xEB,0x36,0xE4,0x4F,0x52,0xCE,0x11,    // Class-specific VS format descript
+             -or
+ 576            0x9F,0x53,0x00,0x20,0xAF,0x0B,0xA7,0x70,0x10,0x01,0x00,0x00,0x00,0x00,  // Descriptor type:    0x24 (CS_I
+             -NTERFACE)
+ 577                                                // Descriptor subtype: 0x04 (VS_FORMAT_UNCOMPRESSED)                              
+ 578                                                // NumFrameDescriptor: 0x05 (5 frams descriptors)
+ 579                                                                                      // guidFormat:         3259555
+             -9-0000-0010-8000-00aa00389b71 (bit5~20)
+ 580                                                                                      // bBitsPerPixel:      16 (bit
+             - 21) 0x10
+ 581          
+ 582          
+ 583          
+ 584          
+ 585            0x1E,0x24,0x05,0x01,0x00,0x80,0x02,0xE0,0x01,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 586            0xB8,0x0B,0x00,0x60,0x09,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 587                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 588                                                   // 1st frame descriptor
+ 589            
+ 590            0x1E,0x24,0x05,0x02,0x00,0x60,0x01,0x20,0x01,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 591            0xB8,0x0B,0x00,0x18,0x03,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 592                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 593                                                   // 2nd frame descriptor
+ 594            
+ 595            0x1E,0x24,0x05,0x03,0x00,0x40,0x01,0xF0,0x00,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 596            0xB8,0x0B,0x00,0x58,0x02,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 597                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 598                                                   // 3rd frame descriptor
+ 599             
+ 600              0x1E,0x24,0x05,0x04,0x00,0xB0,0x00,0x90,0x00,0x00,0x00,0xB8,0x0B,0x00,0x00,  //   Class-specific VS fr
+             -ame descriptor
+ 601              0xB8,0x0B,0x00,0xC6,0x00,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x
+             -24 (CS_INTERFACE)
+ 602                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+ 603                                                   // 4th frame descriptor
+ 604          
+ 605            0x1E,0x24,0x05,0x05,0x00,0xA0,0x00,0x78,0x00,0x00,0x00,0xB8,0x0B,0x00,0x00, // Class-specific VS frame de
+             -scriptor
+ 606            0xB8,0x0B,0x00,0x96,0x00,0x00,0x15,0x16,0x05,0x00,0x01,0x15,0x16,0x05,0x00,  // Descriptor type:    0x24 
+             -(CS_INTERFACE)
+ 607                                                     // Descriptor subtype: 0x05 (VS_FRAME_UNCOMPRESSED)
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 12  
+
+ 608                                                   // 5th frame descriptor
+ 609            
+ 610            0x1A,0x24,0x03,0x00,0x05,0x80,0x02,0xE0,0x01,0x60,0x01,0x20,0x01, // Class-specific Still Image descripto
+             -r
+ 611            0x40,0x01,0xF0,0x00,0xB0,0x00,0x90,0x00,0xA0,0x00,0x78,0x00,0x00,  // Descriptor type:    0x24 (CS_INTERF
+             -ACE)
+ 612                                               // Descriptor subtype: 0x03 (VS_STILL_IMAGE_FRAME)
+ 613                                                 // EndpointAdress:     0x00 (still image capture method 2 set to zero)
+ 614          
+ 615          
+ 616            
+ 617            0x06,0x24,0x0D,0x00,0x00,0x00,   //Class-specific color matching descriptor
+ 618                              // Descriptor type:    0x24 (CS_INTERFACE)
+ 619                                  // Descriptor subtype: 0x0D (VS_COLORFORMAT)
+ 620          
+ 621          
+ 622            0x09,0x04,0x01,0x01,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 623                                    // Descriptor type:   INTERFACE
+ 624                                    // InterfaceNumber:   0x01 (index of this interface)
+ 625                                    // AlternateSetting:  0x01 (index of this Alternate Setting)
+ 626                                    // NumEndpoint:       0x01
+ 627                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 628                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 629          
+ 630            
+ 631            0x07,0x05,0x86,0x05,0x80,0x00,0x01,   // Standard VS isochronous video data endpoint descriptor
+ 632                                 // Descriptor type:   0x05 (ENDPOINT)
+ 633                                 // EndpointAddress:   0x82== (IN endpoint 2)
+ 634                                 // Attributes:        0x05 (Isochronous transfer type)               
+ 635          
+ 636            
+ 637            0x09,0x04,0x01,0x02,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 638                                    // Descriptor type:   INTERFACE
+ 639                                    // InterfaceNumber:   0x01 (index of this interface)
+ 640                                    // AlternateSetting:  0x02 (index of this Alternate Setting)
+ 641                                    // NumEndpoint:       0x01
+ 642                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 643                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 644            
+ 645            0x07,0x05,0x86,0x05,0x00,0x02,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 646                                 // Descriptor type:   0x05 (ENDPOINT)
+ 647                                 // EndpointAddress:   0x82== (IN endpoint 2)
+ 648                                 // Attributes:        0x05 (Isochronous transfer type)
+ 649            
+ 650            0x09,0x04,0x01,0x03,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 651                                    // Descriptor type:   INTERFACE
+ 652                                    // InterfaceNumber:   0x01 (index of this interface)
+ 653                                    // AlternateSetting:  0x03 (index of this Alternate Setting)
+ 654                                    // NumEndpoint:       0x01
+ 655                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 656                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 657            
+ 658            0x07,0x05,0x86,0x05,0x00,0x04,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 659                                 // Descriptor type:   0x05 (ENDPOINT)
+ 660                                 // EndpointAddress:   0x82== (IN endpoint 2)
+ 661                                 // Attributes:        0x05 (Isochronous transfer type)
+ 662            
+ 663            0x09,0x04,0x01,0x04,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 664                                    // Descriptor type:   INTERFACE
+ 665                                    // InterfaceNumber:   0x01 (index of this interface)
+ 666                                    // AlternateSetting:  0x04 (index of this Alternate Setting)
+ 667                                    // NumEndpoint:       0x01
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 13  
+
+ 668                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 669                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 670            
+ 671            0x07,0x05,0x86,0x05,0x00,0x0B,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 672                                 // Descriptor type:   0x05 (ENDPOINT)
+ 673                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 674                                 // Attributes:        0x05 (Isochronous transfer type)
+ 675            
+ 676            0x09,0x04,0x01,0x05,0x01,0x0E,0x02,0x00,0x00, //Standard VS interface Descriptor (Alternate Setting 1)
+ 677                                    // Descriptor type:   INTERFACE
+ 678                                    // InterfaceNumber:   0x01 (index of this interface)
+ 679                                    // AlternateSetting:  0x05 (index of this Alternate Setting)
+ 680                                    // NumEndpoint:       0x01
+ 681                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 682                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 683            
+ 684            0x07,0x05,0x86,0x05,0x00,0x0C,0x01,   // Standard VS isochronous video data endpoint descriptor
+ 685                                 // Descriptor type:   0x05 (ENDPOINT)
+ 686                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 687                                 // Attributes:        0x05 (Isochronous transfer type)
+ 688            
+ 689            0x09,0x04,0x01,0x06,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 690                                    // Descriptor type:   INTERFACE
+ 691                                    // InterfaceNumber:   0x01 (index of this interface)
+ 692                                    // AlternateSetting:  0x06 (index of this Alternate Setting)
+ 693                                    // NumEndpoint:       0x01
+ 694                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 695                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 696            
+ 697            0x07,0x05,0x86,0x05,0x80,0x13,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 698                                 // Descriptor type:   0x05 (ENDPOINT)
+ 699                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 700                                 // Attributes:        0x05 (Isochronous transfer type)
+ 701            
+ 702            0x09,0x04,0x01,0x07,0x01,0x0E,0x02,0x00,0x00,  //Standard VS interface Descriptor (Alternate Setting 1)
+ 703                                    // Descriptor type:   INTERFACE
+ 704                                    // InterfaceNumber:   0x01 (index of this interface)
+ 705                                    // AlternateSetting:  0x07 (index of this Alternate Setting)
+ 706                                    // NumEndpoint:       0x01
+ 707                                    // InterfaceClass:    0x0E (CC_VIDEO)
+ 708                                    // InterfaceSubClass: 0x02 (SC_VIDEOSTREAMING)
+ 709            
+ 710            0x07,0x05,0x86,0x05,0x00,0x14,0x01,  // Standard VS isochronous video data endpoint descriptor
+ 711                                 // Descriptor type:   0x05 (ENDPOINT)
+ 712                                 // EndpointAddress:   0x82 ==(IN endpoint 2)
+ 713                                 // Attributes:        0x05 (Isochronous transfer type)
+ 714          
+ 715            
+ 716          
+ 717           // Audio
+ 718            0x08,0x0B,0x02,0x02,0x01,0x02,0x00,0x03,  //  Descriptor type:   INTERFACE
+ 719                                   // InterfaceNumber:   0x02 (Index of this interface)
+ 720                                   // AlternateSetting:  0x00
+ 721            
+ 722            0x09,0x04,0x02,0x00,0x00,0x01,0x01,0x00,0x03, // USB Microphone Standard AC Interface descriptor
+ 723                                                             // Descriptor type:   INTERFACE
+ 724                                     // InterfaceNumber:   0x02 (Index of this interface)
+ 725                                     // AlternateSetting:  0x00
+ 726                                     // InterfaceClass:    0x01 (Audio) 
+ 727                                     // InterfaceSubClass: 0x01 (AUDIO_CINTROL)
+ 728                                     // NumEndpoint:     0x00 
+ 729            
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 14  
+
+ 730            0x09,0x24,0x01,0x00,0x01,0x27,0x00,0x01 ,0x03,  // USB Microphone Class-specific AC Interface Descriptor
+ 731                                       // Descriptor type:               CS_INTERFACE
+ 732                                     // Descriptor subtype:            HEADER
+ 733                                     // Number of Streaming Interface: 0x01
+ 734                                      
+ 735            
+ 736            0x0C,0x24,0x02,0x01,0x01,0x02,0x00,0x01,0x00,0x00,0x00,0x00,// USB Microphone Input Terminal Descriptor
+ 737                                                                         // Descriptor type:       0x24 (CS_INTERFACE
+             -)
+ 738                                                 // Descriptor subtype:    0x02 (INPUT_TERMINAL)
+ 739                                           // TerminalType:      0x0201 (Microphone)
+ 740                                           // TerminalId:        0x01
+ 741            
+ 742            0x09,0x24,0x06,0x02,0x01,0x01,0x00,0x03,0x00, // FEATURE_UNIT Descriptor
+ 743                                                             // Descriptor type:       0x24 (CS_INTERFACE)
+ 744                                     // Descriptor subtype:    0x06 (FEATURE_UNIT)
+ 745                                     // UnitId:          0x02
+ 746                                    
+ 747          
+ 748            
+ 749            0x09,0x24,0x03,0x03,0x01,0x01,0x01,0x02,0x00, // USB Microphone Output Terminal Descriptor
+ 750                                                            // Descriptor type:       0x24 (CS_INTERFACE)
+ 751                                    // Descriptor subtype:    0x03 (OUTPUT_TERMINAL)
+ 752                                    // TerminalId:        0x03
+ 753                                    
+ 754            
+ 755            0x09,0x04,0x03,0x00,0x00,0x01,0x02,0x00,0x00,   // USB Microphone Standard AS Interface Descriptor (Alt. 
+             -Set. 0) 
+ 756                                                             // Descriptor type:   INTERFACE
+ 757                                     // InterfaceNumber:   0x03 (Index of this interface)
+ 758                                     // AlternateSetting:  0x00
+ 759                                     // InterfaceClass:    0x01 (AUDIO) 
+ 760                                     // InterfaceSubClass: 0x02 (AUDIO_STREAMING)
+ 761                                     // NumEndpoint:     0x00 
+ 762            
+ 763            0x09,0x04,0x03,0x01,0x01,0x01,0x02,0x00,0x00, // USB Microphone Standard AS Interface Descriptor (Alt. Se
+             -t. 1) 
+ 764                                                            // Descriptor type:   INTERFACE
+ 765                                    // InterfaceNumber:   0x03  (Index of this interface)
+ 766                                    // AlternateSetting:  0x01
+ 767                                    // InterfaceClass:    0x01 (AUDIO) 
+ 768                                    // InterfaceSubClass: 0x02 (AUDIO_STREAMING)
+ 769                                    // NumEndpoint:    0x01
+ 770            
+ 771            0x07,0x24,0x01,0x03,0x01,0x01,0x00,        // USB Microphone Class-specific AS General Interface Descriptor
+ 772                                                            // Descriptor type:   0x24 (CS_INTERFACE)
+ 773                                    // DescriptorSubType: 0x01 (GENERAL)
+ 774                                  
+ 775            
+ 776            0x1D,0x24,0x02,0x01,0x01,0x02,0x10,0x07,0x40,0x1F,0x00,0x11,0x2B,0x00,0x80,  // USB Microphone Type I For
+             -mat Type Descriptor
+ 777            0x3E,0x00,0x22,0x56,0x00,0x00,0x7D,0x00,0x44,0xAC,0x00,0x80,0xBB,0x00,          // Descriptor type:   0x2
+             -4 (CS_INTERFACE)
+ 778                                                                    // DescriptorSubType: 0x02 (FORMAT_TYPE_I)
+ 779          
+ 780            
+ 781            
+ 782            0x09,0x05,0x85,0x01,0x62,0x00,0x04,0x00,0x00,  // USB Microphone Standard Endpoint Descriptor 
+ 783                                                            // Descriptor type:   Endpoint
+ 784                                    // EndpointAdress:    0x83== (IN endpoint 3)
+ 785                                    // Attributes:        0x01 (iso)
+ 786            
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 15  
+
+ 787            0x07,0x25,0x01,0x01,0x00,0x00,0x00        // Descriptor type:    CS_Endpoint
+ 788                                    // DescriptorSubType:  0x01 (GENERAL)
+ 789                                    
+ 790          };
+ 791          
+ 792           
+ 793          
+ 794          // High speed configuration Descriptor
+ 795          code unsigned char Ide_Con_Std_D[] = {
+ 796              0x09,0x02,0x20,0x00,0x01,0x01,0x00,0xC0,    // Current Configuration
+ 797              0x32
+ 798          };
+ 799          
+ 800          
+ 801          
+ 802          code unsigned char Ide_Con_Oth_D[] = {
+ 803              0x09,0x07,0x20,0x00,0x01,0x01,0x00,0xC0,    // Other speed Configuration
+ 804              0x32
+ 805          };
+ 806          
+ 807          
+ 808          
+ 809          // High speed configuration Descriptor
+ 810          code unsigned char Ide_Int_HS_D[] = {
+ 811              0x09,0x04,0x00,0x00,0x02,0x08,0x06,0x50,    // Interface
+ 812              0x00,
+ 813              0x07,0x05,0x01,0x02,0x00,0x02,0x00,     // EP, max psize = 512
+ 814              0x07,0x05,0x82,0x02,0x00,0x02,0x00
+ 815          };
+ 816          
+ 817          
+ 818          
+ 819          
+ 820          // Full speed Configuration Descriptor
+ 821          code unsigned char Ide_Int_FS_D[] = {
+ 822              0x09,0x04,0x00,0x00,0x02,0x08,0x06,0x50,    // Interface
+ 823              0x00,
+ 824              0x07,0x05,0x01,0x02,0x40,0x00,0x00,     // EP,max psize =64
+ 825              0x07,0x05,0x82,0x02,0x40,0x00,0x00
+ 826          };
+ 827          
+ 828          
+ 829          
+ 830          
+ 831          // High speed configuration Descriptor for bInterfaceSubClass = 0x02
+ 832          code unsigned char Ide_Int_HS_D_02[] = {
+ 833              0x09,0x04,0x00,0x00,0x02,0x08,0x02,0x50,    // Interface
+ 834              0x00,
+ 835              0x07,0x05,0x01,0x02,0x00,0x02,0x00,     // EP, max psize = 512
+ 836              0x07,0x05,0x82,0x02,0x00,0x02,0x00
+ 837          };
+ 838          
+ 839          
+ 840          
+ 841          
+ 842          // Full speed Configuration Descriptor for bInterfaceSubClass = 0x02
+ 843          code unsigned char Ide_Int_FS_D_02[] = {
+ 844              0x09,0x04,0x00,0x00,0x02,0x08,0x02,0x50,    // Interface
+ 845              0x00,
+ 846              0x07,0x05,0x01,0x02,0x40,0x00,0x00,     // EP,max psize =64
+ 847              0x07,0x05,0x82,0x02,0x40,0x00,0x00
+ 848          };
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 16  
+
+ 849          
+ 850          
+ 851          
+ 852          
+ 853          // High speed configuration Descriptor for bInterfaceSubClass = 0x05
+ 854          code unsigned char Ide_Int_HS_D_05[] = {
+ 855              0x09,0x04,0x00,0x00,0x02,0x08,0x05,0x50,    // Interface
+ 856              0x00,
+ 857              0x07,0x05,0x01,0x02,0x00,0x02,0x00,     // EP, max psize = 512
+ 858              0x07,0x05,0x82,0x02,0x00,0x02,0x00
+ 859          };
+ 860          
+ 861          
+ 862          
+ 863          
+ 864          // Full speed Configuration Descriptor for bInterfaceSubClass = 0x05
+ 865          code unsigned char Ide_Int_FS_D_05[] = {
+ 866              0x09,0x04,0x00,0x00,0x02,0x08,0x05,0x50,    // Interface
+ 867              0x00,
+ 868              0x07,0x05,0x01,0x02,0x40,0x00,0x00,     // EP,max psize =64
+ 869              0x07,0x05,0x82,0x02,0x40,0x00,0x00
+ 870          };
+ 871          
+ 872          
+ 873          
+ 874          
+ 875          // String Descriptor 0, language ID
+ 876          code unsigned char Ide_Str0_D[] = {
+ 877              0x04,0x03,0x09,0x04
+ 878          };
+ 879          
+ 880          // String Descriptor 1, manufacturer string
+ 881          code unsigned char Ide_Str1_D[] = {
+ 882            0x28,0x03,
+ 883            'D',0x00,'I',0x00,'G',0x00,'I',0x00,
+ 884            'T',0x00,'A',0x00,'L',0x00,'P',0x00,
+ 885            'E',0x00,'R',0x00,'S',0x00,'O',0x00,
+ 886            'N',0x00,'A',0x00,' ',0x00,'I',0x00,
+ 887            'n',0x00,'c',0x00,'.',0x00
+ 888          };
+ 889          
+ 890          // String Descriptor 2, product string
+ 891          code unsigned char Ide_Str2_D[] = {
+ 892            0x2C,0x03,
+ 893            'U',0x00,'.',0x00,'r',0x00,'.',0x00,
+ 894            'U',0x00,' ',0x00,'5',0x00,'2',0x00,
+ 895            '0',0x00,'0',0x00,' ',0x00,'P',0x00,
+ 896            'I',0x00,'V',0x00,' ',0x00,'S',0x00,
+ 897            'e',0x00,'n',0x00,'s',0x00,'o',0x00,
+ 898            'r',0x00
+ 899          };
+ 900          
+ 901          // String Descriptor 3 for USB3.0, serial  string
+ 902          code unsigned char Ide_Str3S_D[] = {
+ 903              0x26,0x03,0x31,0x00,0x32,0x00,0x33,0x00,0x34,0x00,0x35,0x00,0x36,0x00,0x37,0x00,
+ 904              0x38,0x00,0x39,0x00,0x30,0x00,0x30,0x00,0x30,0x00,0x30,0x00,0x30,0x00,0x30,0x00,
+ 905              0x30,0x00,0x30,0x00,0x31,0x00
+ 906          };
+ 907          
+ 908          
+ 909          code unsigned char New_Ide_Str3_D[] = {
+ 910              0x28,0x03,
+C51 COMPILER V9.00   USBDESCRIPTOR                                                         01/20/2014 14:45:32 PAGE 17  
+
+ 911              'P',0x00,'R',0x00,'O',0x00,'L',0x00,
+ 912              'I',0x00,'F',0x00,'I',0x00,'C',0x00,
+ 913              'M',0x00,'P',0x00,'0',0x00,'0',0x00,
+ 914              '0',0x00,'0',0x00,'0',0x00,'0',0x00,
+ 915              '0',0x00,'0',0x00,'2',0x00
+ 916          };
+ 917          
+ 918          // String Descriptor 3, serial string
+ 919          code unsigned char Ide_Str3_D[] = {
+ 920              0x04,0x03,'0',0x00
+ 921          };
+ 922          
+ 923          
+ 924          // String Descriptor 3, serial string
+ 925          code unsigned char Ide_Str3f_D[] = {
+ 926              0x06,0x03,'0',0x00, '0', 0x00
+ 927          };
+ 928          
+ 929          code unsigned char Ide_Dvc_QF_D[] = {
+ 930              0x0A,0x06,0x00,0x02,0x00,0x00,0x00,0x40,
+ 931              0x01,0x00
+ 932          };
+ 933          
+ 934          
+ 935          
+ 936          code unsigned char CFReadInquiry[40] = {
+ 937              0x00, 0x80, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00,
+ 938              'P', 'r', 'o', 'l', 'i', 'f', 'i', 'c',
+ 939              ' ', 'U', 'S', 'B', 'C', 'F', 'R', 'e',
+ 940              'a', 'd', 'e', 'r', ' ', ' ', ' ', ' ',
+ 941              '1', '.', '0', '0', 0x06, 0x7B, 0x27, 0x71
+ 942          };
+ 943          
+ 944          
+ 945          // Binary device Object Store (BOS) descriptor
+ 946           code unsigned char Ide_BOS_D[] = {
+ 947            0x05,0x0F,0x0C,0x00,0x01,0x07,0x10,0x02,
+ 948            0x02,0x00,0x00,0x00
+ 949          };
+ 950          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =    711    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,521 @@
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE CIS
+OBJECT MODULE PLACED IN .\bin\CIS.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE src\CIS.c BROWSE DEBUG OBJECTEXTEND PRINT(.\lst\CIS.lst) TABS(2) OBJECT(.\b
+                    -in\CIS.obj)
+
+line level    source
+
+   1          #include "platform.h"
+   2          
+   3          void InitCIS(void)
+   4          {
+   5   1        unsigned char i;
+   6   1        
+   7   1        I2C_Write_Data(0x42,0x12,0x80);   //reset all registers to default value
+   8   1        DelayMS(2);
+   9   1      
+  10   1        I2C_Write_Data(0x42,0x09,0x10); 
+  11   1        for(i=0;i<50;i++);
+  12   1        I2C_Write_Data(0x42,0xC1,0x7F);
+  13   1        for(i=0;i<50;i++); 
+  14   1        I2C_Write_Data(0x42,0x11,0x80);
+  15   1        for(i=0;i<50;i++); 
+  16   1        I2C_Write_Data(0x42,0x3A,0x0C);
+  17   1        for(i=0;i<50;i++); 
+  18   1        I2C_Write_Data(0x42,0x3D,0xC0);
+  19   1        for(i=0;i<50;i++); 
+  20   1        I2C_Write_Data(0x42,0x12,0x00); 
+  21   1        for(i=0;i<50;i++);
+  22   1        I2C_Write_Data(0x42,0x15,0x40);
+  23   1        for(i=0;i<50;i++); 
+  24   1        I2C_Write_Data(0x42,0x17,0x13);
+  25   1        for(i=0;i<50;i++); 
+  26   1        I2C_Write_Data(0x42,0x18,0x01);
+  27   1        for(i=0;i<50;i++); 
+  28   1        I2C_Write_Data(0x42,0x32,0xBF);
+  29   1        for(i=0;i<50;i++); 
+  30   1        I2C_Write_Data(0x42,0x19,0x02);
+  31   1        for(i=0;i<50;i++); 
+  32   1        I2C_Write_Data(0x42,0x1A,0x7A);
+  33   1        for(i=0;i<50;i++); 
+  34   1        I2C_Write_Data(0x42,0x03,0x0A);
+  35   1        for(i=0;i<50;i++); 
+  36   1        I2C_Write_Data(0x42,0x0C,0x00);
+  37   1        for(i=0;i<50;i++); 
+  38   1        I2C_Write_Data(0x42,0x3E,0x00); 
+  39   1        for(i=0;i<50;i++);
+  40   1        I2C_Write_Data(0x42,0x70,0x3A);
+  41   1        for(i=0;i<50;i++); 
+  42   1        I2C_Write_Data(0x42,0x71,0x35);
+  43   1        for(i=0;i<50;i++); 
+  44   1        I2C_Write_Data(0x42,0x72,0x11); 
+  45   1        for(i=0;i<50;i++);
+  46   1        I2C_Write_Data(0x42,0x73,0xF0);
+  47   1        for(i=0;i<50;i++); 
+  48   1        I2C_Write_Data(0x42,0xA2,0x02);
+  49   1        for(i=0;i<50;i++); 
+  50   1        I2C_Write_Data(0x42,0x7A,0x20);
+  51   1        for(i=0;i<50;i++); 
+  52   1        I2C_Write_Data(0x42,0x7B,0x03); 
+  53   1        for(i=0;i<50;i++);
+  54   1        I2C_Write_Data(0x42,0x7C,0x0A);
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 2   
+
+  55   1        for(i=0;i<50;i++); 
+  56   1        I2C_Write_Data(0x42,0x7D,0x1A); 
+  57   1        for(i=0;i<50;i++);
+  58   1        I2C_Write_Data(0x42,0x7E,0x3F);
+  59   1        for(i=0;i<50;i++); 
+  60   1        I2C_Write_Data(0x42,0x7F,0x4E);
+  61   1        for(i=0;i<50;i++); 
+  62   1        I2C_Write_Data(0x42,0x80,0x5B); 
+  63   1        for(i=0;i<50;i++);
+  64   1        I2C_Write_Data(0x42,0x81,0x68);
+  65   1        for(i=0;i<50;i++); 
+  66   1        I2C_Write_Data(0x42,0x82,0x75);
+  67   1        for(i=0;i<50;i++); 
+  68   1        I2C_Write_Data(0x42,0x83,0x7F);
+  69   1        for(i=0;i<50;i++); 
+  70   1        I2C_Write_Data(0x42,0x84,0x89);
+  71   1        for(i=0;i<50;i++); 
+  72   1        I2C_Write_Data(0x42,0x85,0x9A);
+  73   1        for(i=0;i<50;i++); 
+  74   1        I2C_Write_Data(0x42,0x86,0xA6);
+  75   1        for(i=0;i<50;i++); 
+  76   1        I2C_Write_Data(0x42,0x87,0xBD);
+  77   1        for(i=0;i<50;i++); 
+  78   1        I2C_Write_Data(0x42,0x88,0xD3);
+  79   1        for(i=0;i<50;i++); 
+  80   1        I2C_Write_Data(0x42,0x89,0xE8);
+  81   1        for(i=0;i<50;i++); 
+  82   1        I2C_Write_Data(0x42,0x13,0xE0);
+  83   1        for(i=0;i<50;i++); 
+  84   1        I2C_Write_Data(0x42,0x00,0x00);
+  85   1        for(i=0;i<50;i++); 
+  86   1        I2C_Write_Data(0x42,0x10,0x00); 
+  87   1        for(i=0;i<50;i++);
+  88   1        I2C_Write_Data(0x42,0x0D,0x40);
+  89   1        for(i=0;i<50;i++); 
+  90   1        I2C_Write_Data(0x42,0x14,0x28);
+  91   1        for(i=0;i<50;i++); 
+  92   1        I2C_Write_Data(0x42,0xA5,0x02); 
+  93   1        for(i=0;i<50;i++);
+  94   1        I2C_Write_Data(0x42,0xAB,0x02); 
+  95   1        for(i=0;i<50;i++);
+  96   1        I2C_Write_Data(0x42,0x24,0x68);
+  97   1        for(i=0;i<50;i++); 
+  98   1        I2C_Write_Data(0x42,0x25,0x58);
+  99   1        for(i=0;i<50;i++); 
+ 100   1        I2C_Write_Data(0x42,0x26,0xC2); 
+ 101   1        for(i=0;i<50;i++);
+ 102   1        I2C_Write_Data(0x42,0x9F,0x78);
+ 103   1        for(i=0;i<50;i++); 
+ 104   1        I2C_Write_Data(0x42,0xA0,0x68);
+ 105   1        for(i=0;i<50;i++); 
+ 106   1        I2C_Write_Data(0x42,0xA1,0x03);
+ 107   1        for(i=0;i<50;i++); 
+ 108   1        I2C_Write_Data(0x42,0xA6,0xD8);
+ 109   1        for(i=0;i<50;i++); 
+ 110   1        I2C_Write_Data(0x42,0xA7,0xD8);
+ 111   1        for(i=0;i<50;i++); 
+ 112   1        I2C_Write_Data(0x42,0xA8,0xF0);
+ 113   1        for(i=0;i<50;i++); 
+ 114   1        I2C_Write_Data(0x42,0xA9,0x90); 
+ 115   1        for(i=0;i<50;i++);
+ 116   1        I2C_Write_Data(0x42,0xAA,0x14);
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 3   
+
+ 117   1        for(i=0;i<50;i++); 
+ 118   1        I2C_Write_Data(0x42,0x13,0xE5);
+ 119   1        for(i=0;i<50;i++); 
+ 120   1        I2C_Write_Data(0x42,0x0E,0x61);
+ 121   1        for(i=0;i<50;i++); 
+ 122   1        I2C_Write_Data(0x42,0x0F,0x4B);
+ 123   1        for(i=0;i<50;i++); 
+ 124   1        I2C_Write_Data(0x42,0x16,0x02); 
+ 125   1        for(i=0;i<50;i++);
+ 126   1        I2C_Write_Data(0x42,0x1E,0x07); 
+ 127   1        for(i=0;i<50;i++);
+ 128   1        I2C_Write_Data(0x42,0x21,0x02);
+ 129   1        for(i=0;i<50;i++); 
+ 130   1        I2C_Write_Data(0x42,0x22,0x91);
+ 131   1        for(i=0;i<50;i++); 
+ 132   1        I2C_Write_Data(0x42,0x29,0x07); 
+ 133   1        for(i=0;i<50;i++);
+ 134   1        I2C_Write_Data(0x42,0x33,0x0B);
+ 135   1        for(i=0;i<50;i++); 
+ 136   1        I2C_Write_Data(0x42,0x35,0x0B);
+ 137   1        for(i=0;i<50;i++); 
+ 138   1        I2C_Write_Data(0x42,0x37,0x1D);
+ 139   1        for(i=0;i<50;i++); 
+ 140   1        I2C_Write_Data(0x42,0x38,0x71);
+ 141   1        for(i=0;i<50;i++); 
+ 142   1        I2C_Write_Data(0x42,0x39,0x2A);
+ 143   1        for(i=0;i<50;i++); 
+ 144   1        I2C_Write_Data(0x42,0x3C,0x78);
+ 145   1        for(i=0;i<50;i++); 
+ 146   1        I2C_Write_Data(0x42,0x4D,0x40);
+ 147   1        for(i=0;i<50;i++); 
+ 148   1        I2C_Write_Data(0x42,0x4E,0x20); 
+ 149   1        for(i=0;i<50;i++);
+ 150   1        I2C_Write_Data(0x42,0x69,0x00);
+ 151   1        for(i=0;i<50;i++); 
+ 152   1        I2C_Write_Data(0x42,0x6B,0x0A); 
+ 153   1        for(i=0;i<50;i++);
+ 154   1        I2C_Write_Data(0x42,0x74,0x10);
+ 155   1        for(i=0;i<50;i++); 
+ 156   1        I2C_Write_Data(0x42,0x8D,0x4F);
+ 157   1        for(i=0;i<50;i++); 
+ 158   1        I2C_Write_Data(0x42,0x8E,0x00); 
+ 159   1        for(i=0;i<50;i++);
+ 160   1        I2C_Write_Data(0x42,0x8F,0x00);
+ 161   1        for(i=0;i<50;i++); 
+ 162   1        I2C_Write_Data(0x42,0x90,0x00); 
+ 163   1        for(i=0;i<50;i++);
+ 164   1        I2C_Write_Data(0x42,0x91,0x00);
+ 165   1        for(i=0;i<50;i++); 
+ 166   1        I2C_Write_Data(0x42,0x96,0x00);
+ 167   1        for(i=0;i<50;i++); 
+ 168   1        I2C_Write_Data(0x42,0x9A,0x80); 
+ 169   1        for(i=0;i<50;i++);
+ 170   1        I2C_Write_Data(0x42,0xB0,0x84);
+ 171   1        for(i=0;i<50;i++); 
+ 172   1        I2C_Write_Data(0x42,0xB1,0x0C);
+ 173   1        for(i=0;i<50;i++); 
+ 174   1        I2C_Write_Data(0x42,0xB2,0x0E); 
+ 175   1        for(i=0;i<50;i++);
+ 176   1        I2C_Write_Data(0x42,0xB3,0x82); 
+ 177   1        for(i=0;i<50;i++);
+ 178   1        I2C_Write_Data(0x42,0xB8,0x12); //set DOVDD = 2.8V
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 4   
+
+ 179   1        for(i=0;i<50;i++);
+ 180   1        I2C_Write_Data(0x42,0x43,0x0A);
+ 181   1        for(i=0;i<50;i++); 
+ 182   1        I2C_Write_Data(0x42,0x44,0xF2);
+ 183   1        for(i=0;i<50;i++); 
+ 184   1        I2C_Write_Data(0x42,0x45,0x39);
+ 185   1        for(i=0;i<50;i++); 
+ 186   1        I2C_Write_Data(0x42,0x46,0x62); 
+ 187   1        for(i=0;i<50;i++);
+ 188   1        I2C_Write_Data(0x42,0x47,0x3D); 
+ 189   1        for(i=0;i<50;i++);
+ 190   1        I2C_Write_Data(0x42,0x48,0x55); 
+ 191   1        for(i=0;i<50;i++);
+ 192   1        I2C_Write_Data(0x42,0x59,0x83); 
+ 193   1        for(i=0;i<50;i++);
+ 194   1        I2C_Write_Data(0x42,0x5A,0x0D);
+ 195   1        for(i=0;i<50;i++); 
+ 196   1        I2C_Write_Data(0x42,0x5B,0xCD); 
+ 197   1        for(i=0;i<50;i++);
+ 198   1        I2C_Write_Data(0x42,0x5C,0x8C);
+ 199   1        for(i=0;i<50;i++); 
+ 200   1        I2C_Write_Data(0x42,0x5D,0x77);
+ 201   1        for(i=0;i<50;i++); 
+ 202   1        I2C_Write_Data(0x42,0x5E,0x16);
+ 203   1        for(i=0;i<50;i++); 
+ 204   1        I2C_Write_Data(0x42,0x6C,0x0A); 
+ 205   1        for(i=0;i<50;i++);
+ 206   1        I2C_Write_Data(0x42,0x6D,0x65); 
+ 207   1        for(i=0;i<50;i++);
+ 208   1        I2C_Write_Data(0x42,0x6E,0x11); 
+ 209   1        for(i=0;i<50;i++);
+ 210   1        I2C_Write_Data(0x42,0x6A,0x40); 
+ 211   1        for(i=0;i<50;i++);
+ 212   1        I2C_Write_Data(0x42,0x01,0x56);
+ 213   1        for(i=0;i<50;i++); 
+ 214   1        I2C_Write_Data(0x42,0x02,0x44);
+ 215   1        for(i=0;i<50;i++); 
+ 216   1        I2C_Write_Data(0x42,0x13,0xE7); 
+ 217   1        for(i=0;i<50;i++);
+ 218   1        I2C_Write_Data(0x42,0x4F,0x88); 
+ 219   1        for(i=0;i<50;i++);
+ 220   1        I2C_Write_Data(0x42,0x50,0x8B); 
+ 221   1        for(i=0;i<50;i++);
+ 222   1        I2C_Write_Data(0x42,0x51,0x04);
+ 223   1        for(i=0;i<50;i++); 
+ 224   1        I2C_Write_Data(0x42,0x52,0x11); 
+ 225   1        for(i=0;i<50;i++);
+ 226   1        I2C_Write_Data(0x42,0x53,0x8C); 
+ 227   1        for(i=0;i<50;i++);
+ 228   1        I2C_Write_Data(0x42,0x54,0x9D); 
+ 229   1        for(i=0;i<50;i++);
+ 230   1        I2C_Write_Data(0x42,0x55,0x00); 
+ 231   1        for(i=0;i<50;i++);
+ 232   1        I2C_Write_Data(0x42,0x56,0x40); 
+ 233   1        for(i=0;i<50;i++);
+ 234   1        I2C_Write_Data(0x42,0x34,0x11);
+ 235   1        for(i=0;i<50;i++); 
+ 236   1        I2C_Write_Data(0x42,0x3B,0x12); 
+ 237   1        for(i=0;i<50;i++);
+ 238   1        I2C_Write_Data(0x42,0xA4,0x88);
+ 239   1        for(i=0;i<50;i++); 
+ 240   1        I2C_Write_Data(0x42,0x96,0x00); 
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 5   
+
+ 241   1        for(i=0;i<50;i++);
+ 242   1        I2C_Write_Data(0x42,0x97,0x30); 
+ 243   1        for(i=0;i<50;i++);
+ 244   1        I2C_Write_Data(0x42,0x98,0x20); 
+ 245   1        for(i=0;i<50;i++);
+ 246   1        I2C_Write_Data(0x42,0x99,0x30); 
+ 247   1        for(i=0;i<50;i++);
+ 248   1        I2C_Write_Data(0x42,0x9A,0x84); 
+ 249   1        for(i=0;i<50;i++);
+ 250   1        I2C_Write_Data(0x42,0x9B,0x29); 
+ 251   1        for(i=0;i<50;i++);
+ 252   1        I2C_Write_Data(0x42,0x9C,0x03); 
+ 253   1        for(i=0;i<50;i++);
+ 254   1        I2C_Write_Data(0x42,0x9D,0x99); 
+ 255   1        for(i=0;i<50;i++);
+ 256   1        I2C_Write_Data(0x42,0x9E,0x7F); 
+ 257   1        for(i=0;i<50;i++);
+ 258   1        I2C_Write_Data(0x42,0x78,0x04); 
+ 259   1        for(i=0;i<50;i++);
+ 260   1        I2C_Write_Data(0x42,0x79,0x01); 
+ 261   1        for(i=0;i<50;i++);
+ 262   1        I2C_Write_Data(0x42,0xC8,0xF0);
+ 263   1        for(i=0;i<50;i++); 
+ 264   1        I2C_Write_Data(0x42,0x79,0x0F); 
+ 265   1        for(i=0;i<50;i++);
+ 266   1        I2C_Write_Data(0x42,0xC8,0x00); 
+ 267   1        for(i=0;i<50;i++);
+ 268   1        I2C_Write_Data(0x42,0x79,0x10); 
+ 269   1        for(i=0;i<50;i++);
+ 270   1        I2C_Write_Data(0x42,0xC8,0x7E);
+ 271   1        for(i=0;i<50;i++); 
+ 272   1        I2C_Write_Data(0x42,0x79,0x0A); 
+ 273   1        for(i=0;i<50;i++);
+ 274   1        I2C_Write_Data(0x42,0xC8,0x80); 
+ 275   1        for(i=0;i<50;i++);
+ 276   1        I2C_Write_Data(0x42,0x79,0x0B);
+ 277   1        for(i=0;i<50;i++); 
+ 278   1        I2C_Write_Data(0x42,0xC8,0x01); 
+ 279   1        for(i=0;i<50;i++);
+ 280   1        I2C_Write_Data(0x42,0x79,0x0C);
+ 281   1        for(i=0;i<50;i++); 
+ 282   1        I2C_Write_Data(0x42,0xC8,0x0F);
+ 283   1        for(i=0;i<50;i++); 
+ 284   1        I2C_Write_Data(0x42,0x79,0x0D); 
+ 285   1        for(i=0;i<50;i++);
+ 286   1        I2C_Write_Data(0x42,0xC8,0x20);
+ 287   1        for(i=0;i<50;i++); 
+ 288   1        I2C_Write_Data(0x42,0x79,0x09);
+ 289   1        for(i=0;i<50;i++); 
+ 290   1        I2C_Write_Data(0x42,0xC8,0x80);
+ 291   1        for(i=0;i<50;i++); 
+ 292   1        I2C_Write_Data(0x42,0x79,0x02); 
+ 293   1        for(i=0;i<50;i++);
+ 294   1        I2C_Write_Data(0x42,0xC8,0xC0); 
+ 295   1        for(i=0;i<50;i++);
+ 296   1        I2C_Write_Data(0x42,0x79,0x03); 
+ 297   1        for(i=0;i<50;i++);
+ 298   1        I2C_Write_Data(0x42,0xC8,0x40);
+ 299   1        for(i=0;i<50;i++); 
+ 300   1        I2C_Write_Data(0x42,0x79,0x05); 
+ 301   1        for(i=0;i<50;i++);
+ 302   1        I2C_Write_Data(0x42,0xC8,0x30);
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 6   
+
+ 303   1        for(i=0;i<50;i++); 
+ 304   1        I2C_Write_Data(0x42,0x79,0x26); 
+ 305   1        for(i=0;i<50;i++);
+ 306   1        I2C_Write_Data(0x42,0x62,0x00); 
+ 307   1        for(i=0;i<50;i++);
+ 308   1        I2C_Write_Data(0x42,0x63,0x00); 
+ 309   1        for(i=0;i<50;i++);
+ 310   1        I2C_Write_Data(0x42,0x64,0x06); 
+ 311   1        for(i=0;i<50;i++);
+ 312   1        I2C_Write_Data(0x42,0x65,0x00); 
+ 313   1        for(i=0;i<50;i++);
+ 314   1        I2C_Write_Data(0x42,0x66,0x05); 
+ 315   1        for(i=0;i<50;i++);
+ 316   1        I2C_Write_Data(0x42,0x94,0x05);
+ 317   1        for(i=0;i<50;i++); 
+ 318   1        I2C_Write_Data(0x42,0x95,0x09); 
+ 319   1        for(i=0;i<50;i++);
+ 320   1        I2C_Write_Data(0x42,0x2A,0x10);
+ 321   1        for(i=0;i<50;i++); 
+ 322   1        I2C_Write_Data(0x42,0x2B,0xC2);
+ 323   1        for(i=0;i<50;i++); 
+ 324   1        I2C_Write_Data(0x42,0x15,0x00);
+ 325   1        for(i=0;i<50;i++); 
+ 326   1        I2C_Write_Data(0x42,0x3A,0x04); 
+ 327   1        for(i=0;i<50;i++);
+ 328   1        I2C_Write_Data(0x42,0x3D,0xC3);
+ 329   1        for(i=0;i<50;i++); 
+ 330   1        I2C_Write_Data(0x42,0x19,0x03);
+ 331   1        for(i=0;i<50;i++); 
+ 332   1        I2C_Write_Data(0x42,0x1A,0x7B);
+ 333   1        for(i=0;i<50;i++); 
+ 334   1        I2C_Write_Data(0x42,0x2A,0x00);
+ 335   1        for(i=0;i<50;i++); 
+ 336   1        I2C_Write_Data(0x42,0x2B,0x00);
+ 337   1        for(i=0;i<50;i++); 
+ 338   1        I2C_Write_Data(0x42,0x18,0x01); 
+ 339   1        for(i=0;i<50;i++);
+ 340   1        I2C_Write_Data(0x42,0x66,0x05); 
+ 341   1        for(i=0;i<50;i++);
+ 342   1        I2C_Write_Data(0x42,0x62,0x10); 
+ 343   1        for(i=0;i<50;i++);
+ 344   1        I2C_Write_Data(0x42,0x63,0x0B);
+ 345   1        for(i=0;i<50;i++); 
+ 346   1        I2C_Write_Data(0x42,0x65,0x07); 
+ 347   1        for(i=0;i<50;i++);
+ 348   1        I2C_Write_Data(0x42,0x64,0x0F); 
+ 349   1        for(i=0;i<50;i++);
+ 350   1        I2C_Write_Data(0x42,0x94,0x0E); 
+ 351   1        for(i=0;i<50;i++);
+ 352   1        I2C_Write_Data(0x42,0x95,0x10); 
+ 353   1        for(i=0;i<50;i++);
+ 354   1        I2C_Write_Data(0x42,0x4F,0x87); 
+ 355   1        for(i=0;i<50;i++);
+ 356   1        I2C_Write_Data(0x42,0x50,0x68);
+ 357   1        for(i=0;i<50;i++); 
+ 358   1        I2C_Write_Data(0x42,0x51,0x1E); 
+ 359   1        for(i=0;i<50;i++);
+ 360   1        I2C_Write_Data(0x42,0x52,0x15); 
+ 361   1        for(i=0;i<50;i++);
+ 362   1        I2C_Write_Data(0x42,0x53,0x7C); 
+ 363   1        for(i=0;i<50;i++);
+ 364   1        I2C_Write_Data(0x42,0x54,0x91); 
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 7   
+
+ 365   1        for(i=0;i<50;i++);
+ 366   1        I2C_Write_Data(0x42,0x58,0x1E); 
+ 367   1        for(i=0;i<50;i++);
+ 368   1        I2C_Write_Data(0x42,0x41,0x38);
+ 369   1        for(i=0;i<50;i++); 
+ 370   1        I2C_Write_Data(0x42,0x76,0xE0);
+ 371   1        for(i=0;i<50;i++); 
+ 372   1        I2C_Write_Data(0x42,0x24,0x40); 
+ 373   1        for(i=0;i<50;i++);
+ 374   1        I2C_Write_Data(0x42,0x25,0x38); 
+ 375   1        for(i=0;i<50;i++);
+ 376   1        I2C_Write_Data(0x42,0x26,0x91);
+ 377   1        for(i=0;i<50;i++); 
+ 378   1        I2C_Write_Data(0x42,0x7A,0x09);
+ 379   1        for(i=0;i<50;i++); 
+ 380   1        I2C_Write_Data(0x42,0x7B,0x0C);
+ 381   1        for(i=0;i<50;i++); 
+ 382   1        I2C_Write_Data(0x42,0x7C,0x16); 
+ 383   1        for(i=0;i<50;i++);
+ 384   1        I2C_Write_Data(0x42,0x7D,0x28); 
+ 385   1        for(i=0;i<50;i++);
+ 386   1        I2C_Write_Data(0x42,0x7E,0x48);
+ 387   1        for(i=0;i<50;i++); 
+ 388   1        I2C_Write_Data(0x42,0x15,0x00); 
+ 389   1        for(i=0;i<50;i++);
+ 390   1        I2C_Write_Data(0x42,0x3A,0x04); 
+ 391   1        for(i=0;i<50;i++);
+ 392   1        I2C_Write_Data(0x42,0x3D,0xC3);
+ 393   1        for(i=0;i<50;i++); 
+ 394   1        I2C_Write_Data(0x42,0x19,0x03); 
+ 395   1        for(i=0;i<50;i++);
+ 396   1        I2C_Write_Data(0x42,0x1A,0x7B); 
+ 397   1        for(i=0;i<50;i++);
+ 398   1        I2C_Write_Data(0x42,0x2A,0x00);
+ 399   1        for(i=0;i<50;i++); 
+ 400   1        I2C_Write_Data(0x42,0x2B,0x00);
+ 401   1        for(i=0;i<50;i++); 
+ 402   1        I2C_Write_Data(0x42,0x18,0x01);
+ 403   1        for(i=0;i<50;i++); 
+ 404   1        I2C_Write_Data(0x42,0x66,0x05); 
+ 405   1        for(i=0;i<50;i++);
+ 406   1        I2C_Write_Data(0x42,0x62,0x10);
+ 407   1        for(i=0;i<50;i++); 
+ 408   1        I2C_Write_Data(0x42,0x63,0x0B); 
+ 409   1        for(i=0;i<50;i++);
+ 410   1        I2C_Write_Data(0x42,0x65,0x07);
+ 411   1        for(i=0;i<50;i++); 
+ 412   1        I2C_Write_Data(0x42,0x64,0x0F); 
+ 413   1        for(i=0;i<50;i++);
+ 414   1        I2C_Write_Data(0x42,0x94,0x0E); 
+ 415   1        for(i=0;i<50;i++);
+ 416   1        I2C_Write_Data(0x42,0x95,0x10);
+ 417   1        for(i=0;i<50;i++); 
+ 418   1        I2C_Write_Data(0x42,0x4F,0x87);
+ 419   1        for(i=0;i<50;i++); 
+ 420   1        I2C_Write_Data(0x42,0x50,0x68); 
+ 421   1        for(i=0;i<50;i++);
+ 422   1        I2C_Write_Data(0x42,0x51,0x1E); 
+ 423   1        for(i=0;i<50;i++);
+ 424   1        I2C_Write_Data(0x42,0x52,0x15); 
+ 425   1        for(i=0;i<50;i++);
+ 426   1        I2C_Write_Data(0x42,0x53,0x7C); 
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 8   
+
+ 427   1        for(i=0;i<50;i++);
+ 428   1        I2C_Write_Data(0x42,0x54,0x91); 
+ 429   1        for(i=0;i<50;i++);
+ 430   1        I2C_Write_Data(0x42,0x58,0x1E); 
+ 431   1        for(i=0;i<50;i++);
+ 432   1        I2C_Write_Data(0x42,0x41,0x38);
+ 433   1        for(i=0;i<50;i++); 
+ 434   1        I2C_Write_Data(0x42,0x76,0xE0); 
+ 435   1        for(i=0;i<50;i++);
+ 436   1        I2C_Write_Data(0x42,0x24,0x40); 
+ 437   1        for(i=0;i<50;i++);
+ 438   1        I2C_Write_Data(0x42,0x25,0x38); 
+ 439   1        for(i=0;i<50;i++);
+ 440   1        I2C_Write_Data(0x42,0x26,0x91); 
+ 441   1        for(i=0;i<50;i++);
+ 442   1        I2C_Write_Data(0x42,0x7A,0x09); 
+ 443   1        for(i=0;i<50;i++);
+ 444   1        I2C_Write_Data(0x42,0x7B,0x0C); 
+ 445   1        for(i=0;i<50;i++);
+ 446   1        I2C_Write_Data(0x42,0x7C,0x16);
+ 447   1        for(i=0;i<50;i++); 
+ 448   1        I2C_Write_Data(0x42,0x7D,0x28);
+ 449   1        for(i=0;i<50;i++); 
+ 450   1        I2C_Write_Data(0x42,0x7E,0x48); 
+ 451   1        for(i=0;i<50;i++);
+ 452   1        I2C_Write_Data(0x42,0x7F,0x57);
+ 453   1        for(i=0;i<50;i++); 
+ 454   1        I2C_Write_Data(0x42,0x80,0x64); 
+ 455   1        for(i=0;i<50;i++);
+ 456   1        I2C_Write_Data(0x42,0x81,0x71); 
+ 457   1        for(i=0;i<50;i++);
+ 458   1        I2C_Write_Data(0x42,0x82,0x7E); 
+ 459   1        for(i=0;i<50;i++);
+ 460   1        I2C_Write_Data(0x42,0x83,0x89);
+ 461   1        for(i=0;i<50;i++); 
+ 462   1        I2C_Write_Data(0x42,0x84,0x94);
+ 463   1        for(i=0;i<50;i++); 
+ 464   1        I2C_Write_Data(0x42,0x85,0xA8); 
+ 465   1        for(i=0;i<50;i++);
+ 466   1        I2C_Write_Data(0x42,0x86,0xBA); 
+ 467   1        for(i=0;i<50;i++);
+ 468   1        I2C_Write_Data(0x42,0x87,0xD7); 
+ 469   1        for(i=0;i<50;i++);
+ 470   1        I2C_Write_Data(0x42,0x88,0xEC); 
+ 471   1        for(i=0;i<50;i++);
+ 472   1        I2C_Write_Data(0x42,0x89,0xF9); 
+ 473   1        for(i=0;i<50;i++);
+ 474   1        I2C_Write_Data(0x42,0x09,0x01); 
+ 475   1        for(i=0;i<50;i++);
+ 476   1      
+ 477   1        I2C_Write_Data(0x42,0x71,0x00);   //8-bar color bar
+ 478   1        for(i=0;i<50;i++);
+ 479   1        I2C_Write_Data(0x42,0x70,0x00);   //8-bar color bar
+ 480   1      }
+ 481          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3534    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.00   CIS                                                                   01/20/2014 14:45:32 PAGE 9   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
