@@ -64,20 +64,17 @@ void InitUsb2()
 
 void ISO_TEST_1()
 {
-	
-//	XBYTE[ 	0xFF02 ] = 0x01;
-	XBYTE[ 	0xFF04 ] = 0x80;	
+	XBYTE[0xFCC0] = 0x73;
+
+	// Line count per frame is 0x1E0 = 480
+	XBYTE[0xFCC1] = 0xE0;	//CIS_Config_L. [7:0] Line count(7:0) per frame.
+ 	XBYTE[0xFCC2] = 0x09;	//CIS_Config_H. [2:0] Line count(10:8) per frame. [3] if set, the "Frame Number" will show in PTS field of stream header.
  	
-	XBYTE[ 	0xFCC4 ] = 0x1F;
- 	XBYTE[ 	0xFCC5 ] = 0x00;
+ 	XBYTE[0xFCC3] = 0x20;	//CIS_Ctrl. 0x20:Data in enable, it will be in Idel state automatically when transfer finished. (Non-stop)
 
-	XBYTE[ 	0xFCC0 ] = 0x73;
-
-	XBYTE[ 	0xFCC1 ] = 0xE0;
- 	XBYTE[ 	0xFCC2 ] = 0x09;
-	
- 	XBYTE[ 	0xFCC3 ] = 0x20;	// non stop
-
+	// Request frame/line count is 0x1F = 31
+ 	XBYTE[0xFCC4] = 0x1F;	//0xFCC4,Request_Frame/Line_Count_L
+ 	XBYTE[0xFCC5] = 0x00;	//0xFCC5,Request_Frame/Line_Count_H
 }
 
 void UpdateUSB()
@@ -87,7 +84,7 @@ void UpdateUSB()
 START:
 	
 	while( (XBYTE[0xFC01] & 0x80) != 0x80 );	// check if any external USB VBUS pin input
-	XBYTE[0xFC00] =  0x01 | 0x08;							// Attach device to USB bus and enable the MASTER control of USB interrupt 
+	XBYTE[0xFC00] =  0x01 | 0x08;				// Attach device to USB bus and enable the MASTER control of USB interrupt 
 	
 	while (0xFF) {
 		
@@ -100,7 +97,6 @@ START:
 			P2_4=0;
 		}
 		if(_testbit_(BusResume)) {
-			//P2_5=0;
 		}
 		if(_testbit_(PktRcv)){
 			P2_5=0;
@@ -110,7 +106,14 @@ START:
 		if(DS_USB_VBUS_DETACH){
 			goto START;
 		}
+		
 		if(_testbit_(GLOBAL_test)) {
+			//GPIO Pin. To control the power down pin of CIS sensor. 1: power down, 0: normal operation
+#ifdef OV9155
+			P3_0 = 0;
+#else	//PL2551_EVB_64, OV7675
+			P3_2 = 0;
+#endif
 			ISO_TEST_1();
 		}
 	}

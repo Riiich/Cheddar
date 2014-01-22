@@ -1,4 +1,8 @@
 
+void InitC51();
+void Initial_Sub();
+
+
 #define LED_ON	0
 #define LED_OFF	1
 

@@ -534,7 +534,7 @@ void usb_video_class_function()
 				(CTRL_Buffer[5] == 0x00) &&
 				(CTRL_Buffer[6] == 0x1A) &&
 				(CTRL_Buffer[7] == 0x00)){
-					//GLOBAL_test = 1;
+					GLOBAL_test = 1;
 		}
 		
 		//???????????????????

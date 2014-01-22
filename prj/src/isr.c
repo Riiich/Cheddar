@@ -5,7 +5,6 @@ void IntVecDecode();
 //External Interrupt 0 ISR entry
 void int0_isr( void ) interrupt 0
 {
-	P2_3=0;
 	IntVecDecode();
 }
 

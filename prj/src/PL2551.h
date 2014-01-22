@@ -1,18 +1,14 @@
 
-// General
+//General
 #define	TRUE	1
 #define	FALSE	0
 
 //Registers Operation
 #define XBYTE	((unsigned char volatile xdata *) 0)
-#define XWORD	((unsigned int	volatile xdata	*) 0)
-#define CBYTE 	((unsigned char volatile code *) 0)
-#define DBYTE	((unsigned char volatile idata	*) 0)
 
 
 
 //--------------PL2551 Register Table-------------------//
-
 
 #define CONTROL_FIFO						0xF000
 

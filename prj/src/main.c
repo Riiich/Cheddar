@@ -1,8 +1,5 @@
 #include "platform.h"
 
-void InitC51();
-void Initial_Sub();
-
 void main(void)
 {
 	Initial_Sub();
@@ -13,30 +10,30 @@ void main(void)
 void Initial_Sub()
 {
 	InitC51();
-
-	//InitCIS();
+	
+#ifndef OV9155	// !define
+	InitCIS();
+#endif
 }
 
 void InitC51(void)
 {
-//#ifdef OV7675
-	P3_0 = 0;					// Pin 2 of port 3, used to control the power down pin of OV7675. 1 => power down;  0 => normal operation
-//#else
-	//P3_0 = 0;
-//#endif
-
-	IE = 0x83;                  // ET0, EX0(USB), EX1(SATA) interrupt enable
-	IP = 0x01;                  // Set EX0 to higher priority
-	IT0 = 0;                    // INT0 level trigger
+	IE = 0x83;					//ET0, EX0(USB), EX1(SATA) interrupt enable
+	IP = 0x01;					//Set EX0 to higher priority
+	IT0 = 0;					//INT0 level trigger
 
 	InitTimer();
 
-	XBYTE[0xFF00] = 0x11;
-	XBYTE[0xFF02] = 0x01;				// CPU Clock:30MHz
-	XBYTE[0xFF07] = 0x05; 	  	// select CIS function
+	XBYTE[0xFF00] = 0x11;		//boot_ctrl_reg1. bit0:boot from embedded flash. bit4:ICE interface enable.
+	XBYTE[0xFF02] = 0x01;		//Clk_Ctrl. CPU Clock:30MHz
+	
+#ifdef OV9155
+	XBYTE[0xFF04] = 0x40;		//clk_ctrl. bit[6:7]:10,MCLK=12MHz.01,MCLK=24MHz.
+#else
+	XBYTE[0xFF04] = 0x80;		//clk_ctrl. bit[6:7]:10,MCLK=12MHz.01,MCLK=24MHz.
+#endif
 
-	XBYTE[0xFF04] = 0x80;
-	XBYTE[0xFCC3] = 0x40; 			//CPU force master clock enable
+	XBYTE[0xFF07] = 0x05;		//special_func_select. bit0:CIS. bit3:I2C-1.
 }
 
 
