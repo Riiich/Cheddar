@@ -1,11 +1,11 @@
 
 // USB return codes
-#define	USB_STATE_CODE			(0x07) // one of the following
-#define	USB_STALL						(0)
-#define	USB_DONE						(1)
-#define USB_CONTINUE_READ		(2)
+#define	USB_STATE_CODE		(0x07) // one of the following
+#define	USB_STALL			(0)
+#define	USB_DONE			(1)
+#define USB_CONTINUE_READ	(2)
 #define USB_CONTINUE_WRITE	(3)
-#define USB_ABORT						(4)
+#define USB_ABORT			(4)
 
 
 // bmRequestType: Bitfield Definition
@@ -70,7 +70,7 @@
 
 
 
-
+/*
 extern code unsigned char 
        Ide_Dvc_D[],
 	   Ide_Dvc_D_USB3[],
@@ -95,6 +95,8 @@ extern code unsigned char
        Ide_BOS_D[],
        CFReadInquiry[],
        UVC_Std_D[];
+			 */
+			 
 #define UVC_Std_Dlen		587
 
 #define USB3_Con_Std_Dlen	121

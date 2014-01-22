@@ -16,14 +16,20 @@ unsigned char usbSetInterface();
 void controlCMD()
 {
 	unsigned char x;
-	x = ctrlFIFORead(CTRL_Buffer);
+	x = ctrlFIFORead(8, CTRL_Buffer);
+
+	//Decode the 8-byte SETUP pkt data
+	_bmRequestType = CTRL_Buffer[0];
+	_bRequest = CTRL_Buffer[1];
+	_wValue = TOWORD(CTRL_Buffer[3], CTRL_Buffer[2]);
+	_wIndex = TOWORD(CTRL_Buffer[5], CTRL_Buffer[4]);
+	_wLength = TOWORD(CTRL_Buffer[7], CTRL_Buffer[6]);
 	
 	if( x == TRUE ){
-		if((CTRL_Buffer[0]==0x21) || (CTRL_Buffer[0]==0xA1)){
+		if((_bmRequestType==0x21) || (_bmRequestType==0xA1)){
 			usb_video_class_function();
 		} else {
-			
-			switch(CTRL_Buffer[1]){
+			switch(_bRequest){
 				case BR_GET_STATUS:
 					x = usbGetStatus();
 					break;
@@ -53,7 +59,7 @@ void controlCMD()
 					x = usbSetInterface();
 					break;
 				default:
-					x = FALSE;
+					x = USB_STALL;
 					break;
 			}
 		}
@@ -64,190 +70,235 @@ void controlCMD()
 
 unsigned char usbGetStatus()
 {
-	unsigned char x;
+	unsigned char x=0x00;
 
 	// Check the Request integrity:
-	// wLength must be 2 (LSB CTRL_Buffer[6], MSB CTRL_Buffer[7])
-	// wValue must be 0 (LSB CTRL_Buffer[2], MSB CTRL_Buffer[3])
-	if( (CTRL_Buffer[6] != 2) || (CTRL_Buffer[7] != 0) || (CTRL_Buffer[2] != 0) || (CTRL_Buffer[3] != 0) ) {
+	// wValue must be 0
+	// wLength must be 2
+	if ((_wValue != 0)||(_wLength != 2)){
+		XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
 		return USB_STALL;
 	}
 
-	switch( CTRL_Buffer[0] ) {
-    case 0x80:								// Device Status
-			// Check wIndex (LSB CTRL_Buffer[4], MSB CTRL_Buffer[5])
-        if( (CTRL_Buffer[4] == 0) && (CTRL_Buffer[5] == 0) ) {	// if wIndex == 0
-						// BUG: Not assigned x value will be returned
-						// Should be:  x = ((XBYTE[DEV_CTRL] >> 1) & 0x02) | DEV_CFG_SELF_PWRED; (or x = ((XBYTE[DEV_CTRL] >> 1) & 0x02) | DEV_CFG_BUS_PWRED;)
-						// definitions:
-						// ((XBYTE[DEV_CTRL] >> 1) & 0x02)   - return the device Remote Wake up Enabled flag in bit 1 
-						// #define DEV_CFG_BUS_PWRED	(0x00)
-						// #define DEV_CFG_SELF_PWRED	(0x01)
-        } else {																								// if wIndex != 0
-            return USB_STALL;
-        }
-        break;
-    case 0x81:								// Interface status
-        x = 0x00;	// Always return 0
-        break;
-    case 0x82:								// Endpoint status
-				// Check wIndex (LSB CTRL_Buffer[4], MSB CTRL_Buffer[5])
-        if( CTRL_Buffer[5] != 0 ) {	 	// if wIndex MSB != 0
-            return USB_STALL;
-        }
-        switch( CTRL_Buffer[4] ) {		// LSB of wIndex specify EP
-        case 0x00:	// Control EP
-            x = XBYTE[EP0_CTRL];
-            break;
-        case 0x01:	// EP1 (OUT endpoint)
-            x = XBYTE[EP1_CTRL];
-            break;
-        case 0x82:	// EP2 (IN Endpoint)
-            x = XBYTE[EP2_CTRL];
-            break;
-        default:
-            return USB_STALL;
-        }
+	switch( _bmRequestType){
+		case 0x80:	//Device status
+			if (_wIndex == 0){
+				if(!busPowered){
+					x |= 0x01;
+				}
+				if(RemoteWakeup){
+					x |= 0x02;
+				}
+			}
+			else{
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
+        	break;
+		case 0x81:	//Interface status. Get Status is used to return the status of the interface. Such a request to the interface should return two bytes of 0x00, 0x00. (Both bytes are reserved for future use)
+			//if(LOW_BYTE(_wIndex) <= IF_MAX_DESCR){ //IF_MAX_DESCR (HidDisabled ? 0 : 2)
+				//richc, should return 2 byte of 0x00
+				x = 0x00;
+			//}
+			//else{
+				//XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				//return USB_STALL;
+			//}
+        	break;
+    	case 0x82:	//Endpoint status. Get Status returns two bytes indicating the status (Halted/Stalled) of a endpoint.
+    		_wIndex &= 0x0F;
+    		if(_wIndex > 4){//EP_MAX_DESCR=4
+    			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+    			return USB_STALL;
+			}
 
-        if( x & 0x02 ) { 	// Check Endpoint Stall flag (bit 1)
-            x = 0x01; 		// Set HALT Flag in the returned value if EP is Stalled
-        } else {
-            x = 0x00; 		// Do Not Set HALT Flag in the returned value if EP is Not Stalled
-        }
-        break;
+			switch(_wIndex){// CTRL_Buffer[4], LSB of wIndex specify EP
+				case 0x00:	// Control EP
+					x = XBYTE[EP0_CTRL];
+					break;
+				case 0x01:	// EP1 (OUT endpoint)
+					x = XBYTE[EP1_CTRL];
+					break;
+				case 0x82:	// EP2 (IN Endpoint)
+					x = XBYTE[EP2_CTRL];
+					break;
+				default:
+					XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+					return USB_STALL;
+			}
 
-    default:
-        return USB_STALL;
-    }
+			if( x & 0x02 ) { 	// Check Endpoint Stall flag (bit 1)
+				x = 0x01; 		// Set HALT Flag in the returned value if EP is Stalled
+			} else {
+				x = 0x00; 		// Do Not Set HALT Flag in the returned value if EP is Not Stalled
+			}
+			break;
+		default:
+			return USB_STALL;
+	}
 
-    XBYTE[CONTROL_FIFO] = x;		// Put the result to EP0 FIFO (LSB of the returned STATUS)
-    XBYTE[CONTROL_FIFO+1] = 0;	// Put 0 byte to EP0 FIFO (MSB of the returned STATUS)
-    XBYTE[EP0_CTRL] |= 0x01;		// Set Endpoint Done flag to transfer the data
-		
+	XBYTE[CONTROL_FIFO] = x;		// Put the result to EP0 FIFO (LSB of the returned STATUS)
+	XBYTE[CONTROL_FIFO+1] = 0;		// Put 0 byte to EP0 FIFO (MSB of the returned STATUS)
+	XBYTE[EP0_CTRL] |= 0x01;		// Set Endpoint Done flag to transfer the data
+
 	return USB_DONE;
 }
 
 unsigned char usbClearFeature()
 {
-	if( (CTRL_Buffer[3] != 0) || (CTRL_Buffer[6] != 0) || (CTRL_Buffer[7] != 0) ) {
-        return USB_STALL;
+	if(_wLength!=0){
+	//if( (CTRL_Buffer[3] != 0) || (CTRL_Buffer[6] != 0) || (CTRL_Buffer[7] != 0) ) {
+		XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+		return USB_STALL;
 	}
-	
-	switch( CTRL_Buffer[0] ) {
-    case BMR_REC_DEVICE:																//	Device status
-        if( (CTRL_Buffer[4] != 0) || (CTRL_Buffer[5] != 0) ) {
-            return USB_STALL;
-        }
 
-        if( CTRL_Buffer[2] == FTR_DEVICE_REMOTE_WAKEUP ) {
-            //	RemoteWakeup = 0;
-        } else {
-            return USB_STALL;
-        }
+	switch(_bmRequestType){
+		case BMR_REC_DEVICE:
+			if(_wIndex !=0){
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
+
+			if(LOW_BYTE(_wValue)== FTR_DEVICE_REMOTE_WAKEUP){
+				//if(desc.Attri)
+				RemoteWakeup = 0;
+				//else STALL
+			}else{
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
         break;
 
-    case BMR_REC_INTERFACE:															//	Interface status
-        return USB_STALL;
+    case BMR_REC_INTERFACE:
+		return USB_STALL;
+		break;
+		
+	case BMR_REC_ENDPOINT:
+		if(LOW_BYTE(_wValue)==FTR_ENDPOINT_HALT){
+			
+			_wIndex &= 0x0F;
+			//if( CTRL_Buffer[5] != 0 ) {
+			if(LOW_BYTE(_wIndex) >= 4){	//EP_MAX_DESCR
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
 
-    case BMR_REC_ENDPOINT:															//	Endpoint status
-        if( CTRL_Buffer[2] == FTR_ENDPOINT_HALT ) {			//	Feature selector is endpoint_halt
-            if( CTRL_Buffer[5] != 0 ) {
-                return USB_STALL;
-            }
+			switch(LOW_BYTE(_wIndex)){
+				case 0x00:
+					XBYTE[EP0_CTRL] = 0x18;
+					break;
+				case 0x01:
+					XBYTE[EP1_CTRL] = 0x28;
+					XBYTE[ENP_TOG_CLR] = 0x02;
+					//	XBYTE[USB3_FIFO_FLUSH_CTRL] = 0x03;
+					break;
+				case 0x82:
+					XBYTE[EP2_CTRL] = 0x10;
+					XBYTE[ENP_TOG_CLR] = 0x04;
+					break;
+				default:
+					XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+					return USB_STALL;
+			}
+		}
+		else{
+			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+			return USB_STALL;
+		}
+		break;
 
-            switch( CTRL_Buffer[4] ) {
-							case 0x00:
-									XBYTE[EP0_CTRL] = 0x18;
-									break;
-							case 0x01:
-									XBYTE[EP1_CTRL] = 0x28;
-									XBYTE[ENP_TOG_CLR] = 0x02;
-									//	XBYTE[USB3_FIFO_FLUSH_CTRL] = 0x03;
-									break;
-							case 0x82:
-									XBYTE[EP2_CTRL] = 0x10;
-									XBYTE[ENP_TOG_CLR] = 0x04;
-									break;
-							default:
-									return USB_STALL;
-            }
-        } else {
-            return USB_STALL;
-        }
-        break;
-    default:
-        return USB_STALL;
-    }
-    return USB_DONE;
+	default:
+		XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+		return USB_STALL;
+	}
+
+	XBYTE[EP0_CTRL] = 0x21;
+	return USB_DONE;
 }
 
 unsigned char usbSetFeature()
 {
-	if( (CTRL_Buffer[3] != 0) || (CTRL_Buffer[6] != 0) || (CTRL_Buffer[7] != 0) ) {
+	if(_wLength != 0){
+		XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
 		return USB_STALL;
 	}
-	
-	switch( CTRL_Buffer[0] ) {
-		case BMR_REC_DEVICE:																//	Device status
-        if( CTRL_Buffer[2] == FTR_DEVICE_REMOTE_WAKEUP ) {
-            //  RemoteWakeup = 1;
-        } else if( CTRL_Buffer[2] == FTR_DEVICE_TEST_MODE ) {
-            if( (CTRL_Buffer[4] != 0) || (CTRL_Buffer[5] > 4) || (CTRL_Buffer[5] == 0) ) {
-                return USB_STALL;
-            }
-						
-            TEST_MODE = CTRL_Buffer[5] | 0x08;
-        } else {
-            return USB_STALL;
-        }
-        break;
 
-		case BMR_REC_INTERFACE:															//	Interface status
-        return USB_STALL;
-				break;
-		case BMR_REC_ENDPOINT:									//	Endpoint status
-			if( CTRL_Buffer[2] == FTR_ENDPOINT_HALT ) {
-            if( CTRL_Buffer[5] != 0 ) {
-                return USB_STALL;
-            }
+	switch(_bmRequestType){
 
-            switch( CTRL_Buffer[4] ) {
-							case 0x00:
-									XBYTE[EP0_CTRL] = 0x1A;
-									break;
-							case 0x01:
-									XBYTE[EP1_CTRL] = 0x2A;
-									break;
-							case 0x82:
-									XBYTE[EP2_CTRL] = 0x12;
-									break;
-							default:
-									return USB_STALL;
-            }
-        } else {
-            return USB_STALL;
-        }
-        break;
-    default:
-        return USB_STALL;
-    }
+		case BMR_REC_DEVICE:
+	        if(LOW_BYTE(_wValue) == FTR_DEVICE_REMOTE_WAKEUP ) {
+				RemoteWakeup = 1;
+			//Ignore FTR_DEVICE_TEST_MODE
+			/*
+	        	} else if( CTRL_Buffer[2] == FTR_DEVICE_TEST_MODE ) {
+	            		if( (CTRL_Buffer[4] != 0) || (CTRL_Buffer[5] > 4) || (CTRL_Buffer[5] == 0) ) {
+	                		return USB_STALL;
+	            		}
+							
+	            		TEST_MODE = CTRL_Buffer[5] | 0x08;
+	            	}
+			*/
+			}else{
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
+			break;
 
-    return USB_DONE;
+		case BMR_REC_INTERFACE:
+			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+			return USB_STALL;
+			break;
+			
+		case BMR_REC_ENDPOINT:
+			if(LOW_BYTE(_wValue) == FTR_ENDPOINT_HALT ) {
+				
+				//if( CTRL_Buffer[5] != 0 ) {
+				if(LOW_BYTE(_wIndex) >= 4){	//EP_MAX_DESCR
+					XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+					return USB_STALL;
+				}
+
+				switch(LOW_BYTE(_wIndex)) {
+					case 0x00:
+						XBYTE[EP0_CTRL] = 0x1A;
+						break;
+					case 0x01:
+						XBYTE[EP1_CTRL] = 0x2A;
+						break;
+					case 0x82:
+						XBYTE[EP2_CTRL] = 0x12;
+						break;
+					default:
+						XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+						return USB_STALL;
+				}
+			} else {
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
+			break;
+			
+		default:
+			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+			return USB_STALL;
+		}
+
+	return USB_DONE;
 }
 
 unsigned char usbSetAddress()
 {
+/*
 	if( (CTRL_Buffer[2] & 0x80) || (CTRL_Buffer[3] != 0) ||
             (CTRL_Buffer[4] != 0) || (CTRL_Buffer[5] != 0) ||
             (CTRL_Buffer[6] != 0) || (CTRL_Buffer[7] != 0) ) {
         return USB_STALL;
 	}
-	
-	DEVICE0_ADDRESS = CTRL_Buffer[2];
-	//Addressed = 1;	// Timer address_completion_wait
-	
+*/
+	bDeviceAddress = LOW_BYTE(_wValue);
+	DEVICE0_ADDRESS = bDeviceAddress;
+
 	XBYTE[EP0_CTRL] = 0x21;
-	
 	return USB_DONE;
 }
 
@@ -264,7 +315,7 @@ unsigned char usbGetDescriptor()
 
     case DS_DEVICE:											// Device Descriptor
         rlen = Ide_Dvc_Dlen;
-        descp = Ide_Dvc_D;
+        descp = device_desc;
         if( (CTRL_Buffer[6] < rlen) ) {
             rlen = CTRL_Buffer[6];
         }
@@ -281,7 +332,7 @@ unsigned char usbGetDescriptor()
         switch( CTRL_Buffer[2] ) {
 					case 0x00:		// LangID string
 							rlen = Ide_Str0_Dlen;
-							descp = Ide_Str0_D;
+							descp = string_desc0;
 							if( (CTRL_Buffer[6] < rlen) ) {
 									rlen = CTRL_Buffer[6];
 							}
@@ -289,7 +340,7 @@ unsigned char usbGetDescriptor()
 							break;
 					case 0x01:
 							rlen = Ide_Str1_Dlen;
-							descp = Ide_Str1_D;
+							descp = string_desc1;
 							if( (CTRL_Buffer[6] < rlen) ) {
 									rlen = CTRL_Buffer[6];
 							}
@@ -297,7 +348,7 @@ unsigned char usbGetDescriptor()
 							break;
 					case 0x02:
 							rlen = Ide_Str2_Dlen;
-							descp = Ide_Str2_D;
+							descp = string_desc2;
 							if( (CTRL_Buffer[6] < rlen) ) {
 									rlen = CTRL_Buffer[6];
 							}
@@ -306,7 +357,7 @@ unsigned char usbGetDescriptor()
 							break;
 					case 0x03:
 							rlen = Ide_Str3_Dlen;
-							descp = Ide_Str3_D;
+							descp = string_desc3;
 							if( (CTRL_Buffer[6] < rlen) ) {
 									rlen = CTRL_Buffer[6];
 							}
@@ -336,29 +387,54 @@ unsigned char usbGetDescriptor()
 
 unsigned char usbGetConfig()
 {
+/*
     if( (CTRL_Buffer[2] != 0) || (CTRL_Buffer[3] != 0) ||
             (CTRL_Buffer[4] != 0) || (CTRL_Buffer[5] != 0) ||
             (CTRL_Buffer[6] != 1) || (CTRL_Buffer[7] != 0) ) {
         return USB_STALL;
     }
-
+    
     if( Configed ) {
         XBYTE[CONTROL_FIFO] = 0x01;
     } else {
         XBYTE[CONTROL_FIFO] = 0x00;
     }
+*/
+	XBYTE[CONTROL_FIFO] = bConfiguration;
 
     XBYTE[EP0_CTRL] |= 0x01;
-
     return USB_DONE;
 }
 
 unsigned char usbSetConfig()
 {
+/*
+	if( (CTRL_Buffer[3] != 0) || (CTRL_Buffer[4] != 0) || (CTRL_Buffer[5] != 0) || (CTRL_Buffer[6] != 0) || (CTRL_Buffer[7] != 0) ){
+		XBYTE[EP0_CTRL] = 0x23;
+		return( FALSE );
+	}
+
+*/
+	switch(LOW_BYTE(_wValue)){
+		case 0:
+			XBYTE[0xFC04] = 0x01;	//ENP_EN_L, Disable all other endpoint except enpt 0
+			break;
+		case 1:
+			XBYTE[0xFC04] = 0x7F;	//(HidDisabled ? 0x1F : 0x7F), Enable Interrupt In + Bulk In endpoints
+			XBYTE[0xFC08] = 0x01;	//ENP_InterruptMask_L, Enable EP0 interrupt .... (but why not 0x05, Interrupt In + Bulk In interrupt ???)
+			break;
+		default:
+			XBYTE[EP0_CTRL] = 0x23;
+			return USB_STALL;
+	}
+
 	XBYTE[EP1_CTRL] = 0x28;
 	XBYTE[EP2_CTRL] = 0x10;
+	XBYTE[EP6_CTRL] = 0x10;
+			
+	bConfiguration = LOW_BYTE(_wValue);
+	
 	XBYTE[EP0_CTRL] = 0x21;
-
 	return USB_DONE;
 }
 
@@ -1270,8 +1346,8 @@ unsigned int  offset = 0;
       // Device Descriptor
       case 0x01:
 
-            rlen = Ide_Dvc_D[0];
-            descp = Ide_Dvc_D;
+            rlen = device_desc[0];
+            descp = device_desc;
             if( (cmd_len < rlen) )
             {
                 rlen = CTRL_Buffer[6];

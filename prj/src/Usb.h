@@ -1,6 +1,6 @@
 ///// From UsbApi.c
 void UpdateUSB();
-unsigned char ctrlFIFORead(unsigned char *buf);
+unsigned char ctrlFIFORead(unsigned int len, unsigned char *buf);
 unsigned char ctrlFIFOWrite(unsigned int len, unsigned char *buf);
 
 

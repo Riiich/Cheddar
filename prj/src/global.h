@@ -1,4 +1,23 @@
 
+#define LED_ON	0
+#define LED_OFF	1
+
+#ifndef _BYTE_DEF_
+#define _BYTE_DEF_
+typedef unsigned char BYTE;
+#endif /* _BYTE_DEF_ */
+
+#ifndef _WORD_DEF_
+#define _WORD_DEF_
+//typedef union {unsigned int i; unsigned char c[2];} WORD;
+typedef unsigned int	WORD;
+#endif /* _WORD_DEF_ */
+
+#define LOW_BYTE(x)  ( (BYTE) (x & 0xFF) )
+#define HIGH_BYTE(x) ( (BYTE) ((x) >> 8) )
+#define TOWORD(h, l) ( (((WORD) (h)) << 8) | (l) )
+
+
 extern bdata unsigned char flag1;
 extern bit	VbusInt;
 extern bit	test_flag;
@@ -17,6 +36,16 @@ extern bit	Addressed;
 extern bit	T0Timeout;
 extern bit	T1Timeout;
 extern bit	T2Timeout;
+
+// USB Setup token
+extern data BYTE _bmRequestType;
+extern data BYTE _bRequest;
+extern data WORD _wValue;
+extern data WORD _wIndex;
+extern data WORD _wLength;
+
+extern BYTE	data		bConfiguration;
+extern BYTE	data		bDeviceAddress;
 
 extern xdata unsigned char CTRL_Buffer[];
 extern xdata unsigned char SHARE_Buffer[];

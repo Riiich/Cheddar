@@ -7,11 +7,13 @@
 
 
 
-extern code unsigned char Ide_Dvc_D[];
-extern code unsigned char Ide_Str0_D[];
-extern code unsigned char Ide_Str1_D[];
-extern code unsigned char Ide_Str2_D[];
-extern code unsigned char Ide_Str3_D[];
+extern code unsigned char device_desc[];
+extern code unsigned char string_desc0[];
+extern code unsigned char string_desc1[];
+extern code unsigned char string_desc2[];
+extern code unsigned char string_desc3[];
+
+
 extern code unsigned char Ide_Dvc_QF_D[];
 extern code unsigned char UVC_Std_D[];
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   USBAPI                                                                01/20/2014 14:45:31 PAGE 1   
+C51 COMPILER V9.00   USBAPI                                                                01/22/2014 12:07:26 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE USBAPI
@@ -13,201 +13,281 @@ line level    source
    3          void InitUsb2()
    4          {
    5   1        XBYTE[0xFC00] |= 0x10 ;    // USB Soft Reset
-   6   1        _nop_();_nop_();_nop_();_nop_();
-   7   1          _nop_();_nop_();_nop_();
-   8   1      
-   9   1        //end-point 0 setting
-  10   1          XBYTE[0xFC32] = 0x03;   // EP0 control endpoint,  packet size 64 bytes 
-  11   1          XBYTE[0xFC34] = 0x20;   // Control register setting, interrupt happens when packet of data is received.
-             -  
-  12   1      
-  13   1        //end-point 6 setting
-  14   1          XBYTE[0xFC61] |= 0x10;    // enable maximum packet size
-  15   1          XBYTE[0xFC62] = 0xA6;   // ISO In, packet size = 1024 bytes
-  16   1          XBYTE[0xFC64] = 0x10;
-  17   1      
-  18   1        //------------FIFO SIZE SETTING--------------------
-  19   1        XBYTE[EP1_FIFO_SIZE_REG]= 0x00; 
-  20   1        XBYTE[EP2_FIFO_SIZE_REG]= 0x00;
-  21   1        XBYTE[EP3_FIFO_SIZE_REG]= 0x00;
-  22   1        XBYTE[EP4_FIFO_SIZE_REG]= 0x00;
-  23   1        XBYTE[EP5_FIFO_SIZE_REG]= 0x00;
-  24   1        XBYTE[EP6_FIFO_SIZE_REG]= 0x80;
-  25   1        XBYTE[EP7_FIFO_SIZE_REG]= 0x00;
-  26   1        XBYTE[EP8_FIFO_SIZE_REG]= 0x00;
-  27   1        XBYTE[EP9_FIFO_SIZE_REG]= 0x00;
-  28   1        XBYTE[EP10_FIFO_SIZE_REG]= 0x00;
-  29   1        XBYTE[EP11_FIFO_SIZE_REG]= 0x00;
-  30   1        XBYTE[EP12_FIFO_SIZE_REG]= 0x00;
-  31   1        XBYTE[EP13_FIFO_SIZE_REG]= 0x00;
-  32   1        XBYTE[EP14_FIFO_SIZE_REG]= 0x00;
-  33   1        XBYTE[EP15_FIFO_SIZE_REG]= 0x00;
+   6   1        _nop_();_nop_();_nop_();_nop_();_nop_();_nop_();_nop_();
+   7   1      
+   8   1        //end-point 0 setting
+   9   1        XBYTE[0xFC32] = 0x03;   // EP0 control endpoint,  packet size 64 bytes 
+  10   1        XBYTE[0xFC34] = 0x20;   // Control register setting, interrupt happens when packet of data is received.
+  11   1      
+  12   1        //end-point 6 setting
+  13   1        XBYTE[0xFC61] |= 0x10;    // enable maximum packet size
+  14   1        XBYTE[0xFC62] = 0xA6;   // ISO In, packet size = 1024 bytes
+  15   1        XBYTE[0xFC64] = 0x10;
+  16   1      
+  17   1        //------------FIFO SIZE SETTING--------------------
+  18   1        XBYTE[EP1_FIFO_SIZE_REG]= 0x00; 
+  19   1        XBYTE[EP2_FIFO_SIZE_REG]= 0x00;
+  20   1        XBYTE[EP3_FIFO_SIZE_REG]= 0x00;
+  21   1        XBYTE[EP4_FIFO_SIZE_REG]= 0x00;
+  22   1        XBYTE[EP5_FIFO_SIZE_REG]= 0x00;
+  23   1        XBYTE[EP6_FIFO_SIZE_REG]= 0x80;
+  24   1        XBYTE[EP7_FIFO_SIZE_REG]= 0x00;
+  25   1        XBYTE[EP8_FIFO_SIZE_REG]= 0x00;
+  26   1        XBYTE[EP9_FIFO_SIZE_REG]= 0x00;
+  27   1        XBYTE[EP10_FIFO_SIZE_REG]= 0x00;
+  28   1        XBYTE[EP11_FIFO_SIZE_REG]= 0x00;
+  29   1        XBYTE[EP12_FIFO_SIZE_REG]= 0x00;
+  30   1        XBYTE[EP13_FIFO_SIZE_REG]= 0x00;
+  31   1        XBYTE[EP14_FIFO_SIZE_REG]= 0x00;
+  32   1        XBYTE[EP15_FIFO_SIZE_REG]= 0x00;
+  33   1      
   34   1      
-  35   1      
-  36   1      //-----------Set Descriptors--------------
-  37   1      // initial the pointer to the USB descriptor 
-  38   1         //Con_Std_Descp = Ide_Con_Std_D;
-  39   1         //InterfaceEP_Descp =  UVC_Std_D_H;
-  40   1         //InterfaceEP_Oth_Descp = UVC_Std_D_F;
-  41   1      //----------------------------------------
+  35   1      //-----------Set Descriptors--------------
+  36   1      // initial the pointer to the USB descriptor 
+  37   1         //Con_Std_Descp = Ide_Con_Std_D;
+  38   1         //InterfaceEP_Descp =  UVC_Std_D_H;
+  39   1         //InterfaceEP_Oth_Descp = UVC_Std_D_F;
+  40   1      //----------------------------------------
+  41   1      
   42   1      
-  43   1      
-  44   1        //Sync FIFO
-  45   1        XBYTE[0xFD8B] |=0x06;   // Choose the FIFO of endpoint 6 to be the input data buffer of CIS
-  46   1      
-  47   1        //---Initial global variables---
-  48   1        VbusInt = 0;
-  49   1        BusReset = 0;
-  50   1        BusSuspend = 0;
-  51   1        BusResume = 0;
-  52   1        PktRcv = 0;
-  53   1        BulkOutRcv = 0;
-C51 COMPILER V9.00   USBAPI                                                                01/20/2014 14:45:31 PAGE 2   
+  43   1        //Sync FIFO
+  44   1        XBYTE[0xFD8B] |=0x06;   // Choose the FIFO of endpoint 6 to be the input data buffer of CIS
+  45   1      
+  46   1        XBYTE[0xFF10] |= 0x02;    // enable resume pin
+  47   1        
+  48   1        XBYTE[0xFC04] = 0xFF;   // enable ALL endpoint buffer
+  49   1        XBYTE[0xFC08] = 0xFF;   // enable ALL endpoint interrupts
+  50   1        XBYTE[0xFC06] = 0x0F;   // enable BusSuspend, BusResume, BusReset and VbusInt interrupts
+  51   1      
+  52   1        //---Initial global variables---
+  53   1        VbusInt = 0;
+  54   1        BusReset = 0;
+C51 COMPILER V9.00   USBAPI                                                                01/22/2014 12:07:26 PAGE 2   
 
-  54   1        Abort = 0;
-  55   1      
-  56   1        XBYTE[0xFF10] |= 0x02;    // enable resume pin
-  57   1        XBYTE[0xFC04] = 0xFF;   // enable ALL endpoint buffer
-  58   1        XBYTE[0xFC08] = 0xFF;   // enable ALL endpoint interrupts
-  59   1        XBYTE[0xFC06] = 0x0F;   // enable BusSuspend, BusResume, BusReset and VbusInt interrupts
-  60   1        
-  61   1      }
-  62          
-  63          void ISO_TEST_1()
-  64          {
-  65   1        
-  66   1      //  XBYTE[  0xFF02 ] = 0x01;
-  67   1        XBYTE[  0xFF04 ] = 0x80;  
-  68   1        
-  69   1        XBYTE[  0xFCC4 ] = 0x1F;
-  70   1        XBYTE[  0xFCC5 ] = 0x00;
-  71   1      
-  72   1        XBYTE[  0xFCC0 ] = 0x73;
+  55   1        BusSuspend = 0;
+  56   1        BusResume = 0;
+  57   1        PktRcv = 0;
+  58   1        BulkOutRcv = 0;
+  59   1        Abort = 0;
+  60   1        bConfiguration = 0;
+  61   1        bDeviceAddress = 0;
+  62   1        
+  63   1      }
+  64          
+  65          void ISO_TEST_1()
+  66          {
+  67   1        
+  68   1      //  XBYTE[  0xFF02 ] = 0x01;
+  69   1        XBYTE[  0xFF04 ] = 0x80;  
+  70   1        
+  71   1        XBYTE[  0xFCC4 ] = 0x1F;
+  72   1        XBYTE[  0xFCC5 ] = 0x00;
   73   1      
-  74   1        XBYTE[  0xFCC1 ] = 0xE0;
-  75   1        XBYTE[  0xFCC2 ] = 0x09;
-  76   1        
-  77   1        XBYTE[  0xFCC3 ] = 0x20;  // non stop
-  78   1      
-  79   1      }
-  80          
-  81          void UpdateUSB()
-  82          {
-  83   1        InitUsb2();
-  84   1      START:
-  85   1        
-  86   1        while( (XBYTE[0xFC01] & 0x80) != 0x80 );  // check if any external USB VBUS pin input
-  87   1        XBYTE[0xFC00] =  0x01 | 0x08;       // Attach device to USB bus and enable the MASTER control of USB interru
-             -pt 
+  74   1        XBYTE[  0xFCC0 ] = 0x73;
+  75   1      
+  76   1        XBYTE[  0xFCC1 ] = 0xE0;
+  77   1        XBYTE[  0xFCC2 ] = 0x09;
+  78   1        
+  79   1        XBYTE[  0xFCC3 ] = 0x20;  // non stop
+  80   1      
+  81   1      }
+  82          
+  83          void UpdateUSB()
+  84          {
+  85   1        InitUsb2();
+  86   1        
+  87   1      START:
   88   1        
-  89   1        while (0xFF) {
-  90   2          
-  91   2          if(_testbit_(BusReset)){
-  92   3            //InitUsb2();
-  93   3            P2_3=0;
-  94   3          }
-  95   2          if (BusSuspend) {
-  96   3            BusSuspend=0;
-  97   3            P2_4=0;
-  98   3          }
-  99   2          if(_testbit_(BusResume)) {
- 100   3            P2_5=0;
+  89   1        while( (XBYTE[0xFC01] & 0x80) != 0x80 );  // check if any external USB VBUS pin input
+  90   1        XBYTE[0xFC00] =  0x01 | 0x08;             // Attach device to USB bus and enable the MASTER control of USB inte
+             -rrupt 
+  91   1        
+  92   1        while (0xFF) {
+  93   2          
+  94   2          if(_testbit_(BusReset)){
+  95   3            InitUsb2();
+  96   3            P2_3=0;
+  97   3          }
+  98   2          if (BusSuspend) {
+  99   3            BusSuspend=0;
+ 100   3            P2_4=0;
  101   3          }
- 102   2          if(_testbit_(PktRcv)){
- 103   3            controlCMD();
+ 102   2          if(_testbit_(BusResume)) {
+ 103   3            //P2_5=0;
  104   3          }
- 105   2      
- 106   2          if(DS_USB_VBUS_DETACH){
- 107   3            goto START;
+ 105   2          if(_testbit_(PktRcv)){
+ 106   3            P2_5=0;
+ 107   3            controlCMD();
  108   3          }
- 109   2          if(GLOBAL_test) {
- 110   3            GLOBAL_test = 0;
- 111   3            //ISO_TEST_1();
+ 109   2      
+ 110   2          if(DS_USB_VBUS_DETACH){
+ 111   3            goto START;
  112   3          }
- 113   2        }
- 114   1      
-C51 COMPILER V9.00   USBAPI                                                                01/20/2014 14:45:31 PAGE 3   
+ 113   2          if(_testbit_(GLOBAL_test)) {
+ 114   3            ISO_TEST_1();
+ 115   3          }
+C51 COMPILER V9.00   USBAPI                                                                01/22/2014 12:07:26 PAGE 3   
 
- 115   1      }
- 116          
- 117          
- 118          // Endpoint 0 FIFO Read 
- 119          unsigned char ctrlFIFORead(/*unsigned int len, */unsigned char *buf )
- 120          {
- 121   1        unsigned int  j;
- 122   1      
- 123   1          // read out the 8-byte control data from endpoint 0 FIFO to user defined buffer
- 124   1          for( j=0; j<8; j++ ){
- 125   2            buf[j] = XBYTE[0xF000+j];
- 126   2      
- 127   2          }
- 128   1         
- 129   1          // If there are not any data following this control transfer, restore EP0 interrupt here.
- 130   1        if( (!((buf[0] == 0x21) && (buf[1] == 0x20) && (buf[6] == 0x07))) && (!((buf[0] == 0x21) &&  (buf[1] == 0
-             -x01))) 
- 131   1              && (!( (buf[0] == 0x21) && (buf[1] == 0xFF) && (buf[2] == 0x00) && (buf[6] != 0) ) ) )
- 132   1        {
- 133   2          XBYTE[0xFCB2] |= 0x01;   //restore EP0
- 134   2        }       
- 135   1      
- 136   1        XBYTE[0xFC34] = 0x2C; //bit3:EP read   bit2:flush
- 137   1      
- 138   1          // During the FIFO flush operation, if bus reset or detach occur, return immediately.
- 139   1        while( XBYTE[0xFC34] & 0x04 ){
- 140   2          if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
- 141   3            return 0;
- 142   3          }
- 143   2        }
- 144   1      
- 145   1          return( TRUE );
+ 116   2        }
+ 117   1      
+ 118   1      }
+ 119          
+ 120          
+ 121          unsigned char ctrlFIFORead(unsigned int len, unsigned char *buf )
+ 122          {
+ 123   1          unsigned int  i;
+ 124   1      
+ 125   1          XBYTE[EP0_CTRL] = 0x10;
+ 126   1          XBYTE[ENP_IRE_STORE] = 0x03;
+ 127   1      
+ 128   1          i = XBYTE[EP0_CTRL+3] & 0x0F;     //ep_ctrl+3 = ep_len_H
+ 129   1          i = (i << 8) | XBYTE[EP0_CTRL+2]; //ep_ctrl+2 = ep_len_L
+ 130   1          if( i == len )
+ 131   1          {
+ 132   2              for( i=0; i<len; i++ )
+ 133   2              {
+ 134   3                  buf[i] = XBYTE[CONTROL_FIFO+i];
+ 135   3              }
+ 136   2              XBYTE[EP0_CTRL] |= 0x04; //flush
+ 137   2              XBYTE[EP0_CTRL] = 0x18;
+ 138   2              return USB_DONE;
+ 139   2          }
+ 140   1          else
+ 141   1          {
+ 142   2              XBYTE[EP0_CTRL] |= 0x04; //flush
+ 143   2              XBYTE[EP0_CTRL] = 0x18;
+ 144   2              return( FALSE );
+ 145   2          }
  146   1      }
  147          
- 148          
- 149          // Endpoint 0 FIFO Write
- 150          unsigned char ctrlFIFOWrite(  unsigned int len, unsigned char *buf )
- 151          {
- 152   1        unsigned int i,j = 0;
- 153   1        
- 154   1        while( XBYTE[0xFC34] & 0x04 ){
- 155   2          if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
- 156   3            return 0;
- 157   3          }
- 158   2        } 
- 159   1        
- 160   1        while ( len > 64 ){
- 161   2          for ( i = 0; i < 64; i++ ){ 
- 162   3            XBYTE[0xF000 + i] = buf[j++]; 
- 163   3          }
- 164   2            
- 165   2          len -= 64;
- 166   2      
- 167   2          // check whether the FIFO is empty or not
- 168   2          while( (XBYTE[0xFC37] & 0x20) == 0 ){
- 169   3            if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
- 170   4              return 0;
- 171   4            }     
- 172   3          }
- 173   2        }
- 174   1        
- 175   1        for ( i = 0; i < len; i++ ) { 
-C51 COMPILER V9.00   USBAPI                                                                01/20/2014 14:45:31 PAGE 4   
+ 148          unsigned char ctrlFIFOWrite(unsigned int len, unsigned char *buf )
+ 149          {
+ 150   1          unsigned int i,j;
+ 151   1          unsigned char k;
+ 152   1        
+ 153   1          if(len > 64) {
+ 154   2              j=0;
+ 155   2              while(j<len) {
+ 156   3                  if( (j+64) >len){   
+ 157   4                      k = len - j;
+ 158   4                      for(i=0; i<k; i++) {
+ 159   5                          XBYTE[CONTROL_FIFO+i]=buf[j+i];
+ 160   5                      }
+ 161   4                      j+=k;
+ 162   4                  }
+ 163   3                  else {
+ 164   4                      for(i=0; i<64; i++) {
+ 165   5                          XBYTE[CONTROL_FIFO+i]=buf[j+i];
+ 166   5                      }
+ 167   4                      j+=64;
+ 168   4                  }       
+ 169   3                  DelayMS(4); 
+ 170   3          
+ 171   3                  if(j!=len){
+ 172   4                    while(!(XBYTE[EP0_STATUS_H] & 0x20)){
+ 173   5                      if(DS_USB_VBUS_DETACH )
+ 174   5                        return(0);
+ 175   5                      if(BusReset)
+ 176   5                        return(0);
+ 177   5                    }
+C51 COMPILER V9.00   USBAPI                                                                01/22/2014 12:07:26 PAGE 4   
 
- 176   2          XBYTE[0xF000 + i] = buf[j++]; 
- 177   2        }
- 178   1      
- 179   1        XBYTE[0xFC34] = 0x21;
- 180   1      
- 181   1        return( TRUE );
- 182   1      }
- 183          
+ 178   4                    /*while(!(XBYTE[EP0_STATUS_H] & 0x20)){
+ 179   4                      CHeck_Crash;
+ 180   4                    }*/
+ 181   4                  }
+ 182   3              }
+ 183   2      
+ 184   2              XBYTE[EP0_CTRL] |= 0x21;
+ 185   2          }
+ 186   1          else {
+ 187   2            for(i=0; i<len; i++) {
+ 188   3              XBYTE[CONTROL_FIFO+i]=buf[i];
+ 189   3            }
+ 190   2            XBYTE[EP0_CTRL] |= 0x21;
+ 191   2          }
+ 192   1          
+ 193   1          return USB_DONE;
+ 194   1      }
+ 195          
+ 196          /*
+ 197          // Endpoint 0 FIFO Read 
+ 198          unsigned char ctrlFIFORead(unsigned char *buf )
+ 199          {
+ 200            unsigned int  j;
+ 201          
+ 202              // read out the 8-byte control data from endpoint 0 FIFO to user defined buffer
+ 203              for( j=0; j<8; j++ ){
+ 204                buf[j] = XBYTE[0xF000+j];
+ 205          
+ 206              }
+ 207             
+ 208              // If there are not any data following this control transfer, restore EP0 interrupt here.
+ 209            if( (!((buf[0] == 0x21) && (buf[1] == 0x20) && (buf[6] == 0x07))) && (!((buf[0] == 0x21) &&  (buf[1] == 0
+             -x01))) 
+ 210                  && (!( (buf[0] == 0x21) && (buf[1] == 0xFF) && (buf[2] == 0x00) && (buf[6] != 0) ) ) )
+ 211            {
+ 212              XBYTE[0xFCB2] |= 0x01;   //restore EP0
+ 213            }       
+ 214          
+ 215            XBYTE[0xFC34] = 0x2C; //bit3:EP read   bit2:flush
+ 216          
+ 217              // During the FIFO flush operation, if bus reset or detach occur, return immediately.
+ 218            while( XBYTE[0xFC34] & 0x04 ){
+ 219              if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
+ 220                return 0;
+ 221              }
+ 222            }
+ 223          
+ 224              return( TRUE );
+ 225          }
+ 226          
+ 227          
+ 228          // Endpoint 0 FIFO Write
+ 229          unsigned char ctrlFIFOWrite(  unsigned int len, unsigned char *buf )
+ 230          {
+ 231            unsigned int i,j = 0;
+ 232            
+ 233            while( XBYTE[0xFC34] & 0x04 ){
+ 234              if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
+ 235                return 0;
+ 236              }
+ 237            } 
+ 238            
+C51 COMPILER V9.00   USBAPI                                                                01/22/2014 12:07:26 PAGE 5   
+
+ 239            while ( len > 64 ){
+ 240              for ( i = 0; i < 64; i++ ){ 
+ 241                XBYTE[0xF000 + i] = buf[j++]; 
+ 242              }
+ 243                
+ 244              len -= 64;
+ 245          
+ 246              // check whether the FIFO is empty or not
+ 247              while( (XBYTE[0xFC37] & 0x20) == 0 ){
+ 248                if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
+ 249                  return 0;
+ 250                }     
+ 251              }
+ 252            }
+ 253            
+ 254            for ( i = 0; i < len; i++ ) { 
+ 255              XBYTE[0xF000 + i] = buf[j++]; 
+ 256            }
+ 257          
+ 258            XBYTE[0xFC34] = 0x21;
+ 259          
+ 260            return( TRUE );
+ 261          }
+ 262          */
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    575    ----
+   CODE SIZE        =    681    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      10
+   DATA SIZE        =   ----      15
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
