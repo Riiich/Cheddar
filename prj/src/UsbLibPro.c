@@ -95,7 +95,11 @@ unsigned char usbGetStatus()
 				return USB_STALL;
 			}
         	break;
-		case 0x81:	//Interface status. Get Status is used to return the status of the interface. Such a request to the interface should return two bytes of 0x00, 0x00. (Both bytes are reserved for future use)
+		case 0x81:	//Interface status
+			//Get Status is used to return the status of the interface. 
+			//Such a request to the interface should return two bytes of 0x00, 0x00.
+			//(Both bytes are reserved for future use)
+			
 			//if(LOW_BYTE(_wIndex) <= IF_MAX_DESCR){ //IF_MAX_DESCR (HidDisabled ? 0 : 2)
 				//richc, should return 2 byte of 0x00
 				x = 0x00;
@@ -105,7 +109,9 @@ unsigned char usbGetStatus()
 				//return USB_STALL;
 			//}
         	break;
-    	case 0x82:	//Endpoint status. Get Status returns two bytes indicating the status (Halted/Stalled) of a endpoint.
+    	case 0x82:	//Endpoint status
+    		//Get Status returns two bytes indicating the status (Halted/Stalled) of a endpoint.
+    		
     		_wIndex &= 0x0F;
     		if(_wIndex > 4){//EP_MAX_DESCR=4
     			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
@@ -306,83 +312,103 @@ unsigned char usbGetDescriptor()
 {
 	unsigned char code *descp;
 	unsigned short rlen;
-	unsigned short cmd_len = 0;
+	//unsigned short cmd_len = 0;
 	unsigned int  offset = 0;
 	
-	cmd_len = (CTRL_Buffer[7]*256 ) +  CTRL_Buffer[6];
+	//cmd_len = _wLength;//(CTRL_Buffer[7]*256 ) +  CTRL_Buffer[6];
 
-	switch( CTRL_Buffer[3] ) {
+	//switch( CTRL_Buffer[3] ) {
+	switch(HIGH_BYTE(_wValue)){
+		case DS_DEVICE:
+			rlen = Ide_Dvc_Dlen;
+			descp = device_desc;
+			/*
+			if( (CTRL_Buffer[6] < rlen) ) {
+				rlen = CTRL_Buffer[6];
+			}
+			*/
+			if(rlen < 0x40){	//CONTROL_ENDPOINT_SIZE
+				rlen = LOW_BYTE(_wLength);
+			}
+			ctrlFIFOWrite(rlen,descp);
+			break;
 
-    case DS_DEVICE:											// Device Descriptor
-        rlen = Ide_Dvc_Dlen;
-        descp = device_desc;
-        if( (CTRL_Buffer[6] < rlen) ) {
-            rlen = CTRL_Buffer[6];
-        }
-        ctrlFIFOWrite(rlen,descp);
-    case DS_CONFIGURATION:							// Configuration Descriptor
-        descp = UVC_Std_D;
-        rlen = UVC_Std_D_len;
-        if( (cmd_len < rlen) ) {
-            rlen = cmd_len;
-        }
-        ctrlFIFOWrite(rlen,descp);
-        break;
-    case DS_STRING:											// String Descriptor
-        switch( CTRL_Buffer[2] ) {
-					case 0x00:		// LangID string
-							rlen = Ide_Str0_Dlen;
-							descp = string_desc0;
-							if( (CTRL_Buffer[6] < rlen) ) {
-									rlen = CTRL_Buffer[6];
-							}
-							ctrlFIFOWrite(rlen,descp);
-							break;
-					case 0x01:
-							rlen = Ide_Str1_Dlen;
-							descp = string_desc1;
-							if( (CTRL_Buffer[6] < rlen) ) {
-									rlen = CTRL_Buffer[6];
-							}
-							ctrlFIFOWrite(rlen,descp);
-							break;
-					case 0x02:
-							rlen = Ide_Str2_Dlen;
-							descp = string_desc2;
-							if( (CTRL_Buffer[6] < rlen) ) {
-									rlen = CTRL_Buffer[6];
-							}
-							ctrlFIFOWrite(rlen,descp);
-							// XBYTE[ENP_IRE_STORE] |= 0x01;
-							break;
-					case 0x03:
-							rlen = Ide_Str3_Dlen;
-							descp = string_desc3;
-							if( (CTRL_Buffer[6] < rlen) ) {
-									rlen = CTRL_Buffer[6];
-							}
-							ctrlFIFOWrite(rlen,descp);
-							//XBYTE[ENP_IRE_STORE] |= 0x01;
-							break;
-					default:
-							return USB_STALL;
-        }
-        break;
-    case DS_DEVICE_QUALIFIER:						// Device_Qualifier Descriptor
-        rlen = Ide_Dvc_QF_Dlen;
-        descp = Ide_Dvc_QF_D;
-        if( (CTRL_Buffer[6] < rlen) ) {
-            rlen = CTRL_Buffer[6];
-        }
-        ctrlFIFOWrite(rlen,descp);
-        break;
-    case DS_INTERFACE_POWER:						// Interface Power Configuration
-        return USB_STALL;
-    default:
-        return USB_STALL;
-    }
+		case DS_CONFIGURATION:
+		case DS_OTHER_SPEED_CONFIG:
+			if(LOW_BYTE(_wIndex)>0){	// we support only one configuration
+				XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+				return USB_STALL;
+			}
+			
+			descp = UVC_Std_D;
+			rlen = UVC_Std_D_len;
+			if( (_wLength < rlen) ) {
+				rlen = _wLength;
+			}
+			ctrlFIFOWrite(rlen,descp);
+			break;
 		
-    return USB_DONE;
+		case DS_STRING:
+			switch(LOW_BYTE(_wValue)) {
+				case 0x00:
+					rlen = Ide_Str0_Dlen;
+					descp = string_desc0;
+					if(_wLength < rlen){
+						rlen = _wLength;
+					}
+					ctrlFIFOWrite(rlen,descp);
+					break;
+				case 0x01:
+					rlen = Ide_Str1_Dlen;
+					descp = string_desc1;
+					if(_wLength < rlen){
+						rlen = _wLength;
+					}
+					ctrlFIFOWrite(rlen,descp);
+					break;
+				case 0x02:
+					rlen = Ide_Str2_Dlen;
+					descp = string_desc2;
+					if(_wLength < rlen){
+						rlen = _wLength;
+					}
+					ctrlFIFOWrite(rlen,descp);
+					// XBYTE[ENP_IRE_STORE] |= 0x01;
+					break;
+				case 0x03:
+					rlen = Ide_Str3_Dlen;
+					descp = string_desc3;
+					if(_wLength < rlen){
+						rlen = _wLength;
+					}
+					ctrlFIFOWrite(rlen,descp);
+					//XBYTE[ENP_IRE_STORE] |= 0x01;
+					break;
+				default:
+					XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+					return USB_STALL;
+        }
+		break;
+		
+		case DS_DEVICE_QUALIFIER:
+			rlen = Ide_Dvc_QF_Dlen;
+			descp = Ide_Dvc_QF_D;
+			if(_wLength < rlen){
+				rlen = _wLength;
+			}
+			ctrlFIFOWrite(rlen,descp);
+			break;
+		
+		case DS_INTERFACE_POWER:
+			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+			return USB_STALL;
+			
+		default:
+			XBYTE[EP0_CTRL] = 0x23;	// endpoin stall
+			return USB_STALL;
+	}
+
+	return USB_DONE;
 }
 
 unsigned char usbGetConfig()
@@ -402,8 +428,8 @@ unsigned char usbGetConfig()
 */
 	XBYTE[CONTROL_FIFO] = bConfiguration;
 
-    XBYTE[EP0_CTRL] |= 0x01;
-    return USB_DONE;
+	XBYTE[EP0_CTRL] |= 0x01;
+	return USB_DONE;
 }
 
 unsigned char usbSetConfig()
