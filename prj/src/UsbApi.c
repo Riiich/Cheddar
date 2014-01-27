@@ -45,9 +45,9 @@ void InitUsb2()
 
 	XBYTE[0xFF10] |= 0x02; 		// enable resume pin
 	
-	XBYTE[0xFC04] = 0xFF;		// enable ALL endpoint buffer
-	XBYTE[0xFC08] = 0xFF;		// enable ALL endpoint interrupts
+	XBYTE[0xFC04] = 0x41;		// enable ALL endpoint buffer
 	XBYTE[0xFC06] = 0x0F;		// enable BusSuspend, BusResume, BusReset and VbusInt interrupts
+	XBYTE[0xFC08] = 0x01;		// enable ALL endpoint interrupts
 
 	//---Initial global variables---
 	VbusInt = 0;
@@ -59,7 +59,6 @@ void InitUsb2()
 	Abort = 0;
 	bConfiguration = 0;
 	bDeviceAddress = 0;
-	
 }
 
 void ISO_TEST_1()
@@ -90,11 +89,11 @@ START:
 		
 		if(_testbit_(BusReset)){
 			InitUsb2();
-			P2_3=0;
+			//P2_3=0;
 		}
 		if (BusSuspend) {
 			BusSuspend=0;
-			P2_4=0;
+			//P2_4=0;
 		}
 		if(_testbit_(BusResume)) {
 		}
@@ -108,7 +107,8 @@ START:
 		}
 		
 		if(_testbit_(GLOBAL_test)) {
-			//GPIO Pin. To control the power down pin of CIS sensor. 1: power down, 0: normal operation
+			
+			//GPIO Pin. To control the POWER_DOWN pin of CIS sensor. 1: power down, 0: normal operation
 #ifdef OV9155
 			P3_0 = 0;
 #else	//PL2551_EVB_64, OV7675
