@@ -68,4 +68,3 @@ void Timer1_ISR() interrupt 3 // using 3
 		TR1 = 1;
 	}
 }
-
