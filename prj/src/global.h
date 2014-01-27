@@ -22,6 +22,17 @@ typedef unsigned int	WORD;
 #define TOWORD(h, l) ( (((WORD) (h)) << 8) | (l) )
 
 
+#ifndef _CIS_DEF_
+#define _CIS_DEF_
+#ifdef OV9155
+#define SENSOR_POWER_PIN	P3_0
+#else
+#define SENSOR_POWER_PIN	P3_2
+#endif
+#define SENSOR_PIN_ON		0
+#define SENSOR_PIN_OFF		1
+#endif /* _CIS_DEF_ */
+
 extern bdata unsigned char flag1;
 extern bit	VbusInt;
 extern bit	test_flag;
