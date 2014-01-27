@@ -233,9 +233,7 @@
 #define InterruptSourceJudg_reg1      0xFF0E
 
 
-
 // ----------------------------- Prolific DcD CPU -----------------------------
-/*
 // Timer2
 sfr T2CON	= 0xC8;
 sfr RLDL	= 0xCA;
@@ -271,5 +269,3 @@ sbit EINT3	= EIE^1;
 sbit EINT4	= EIE^2;
 sbit EINT5	= EIE^3;
 sbit EINT6	= EIE^4;
-
-*/
