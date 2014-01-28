@@ -10,7 +10,7 @@ void InitUsb2()
 	XBYTE[0xFC34] = 0x20;		// Control register setting, interrupt happens when packet of data is received.
 
 	//end-point 6 setting
-	XBYTE[0xFC61] |= 0x10;		// enable maximum packet size
+	XBYTE[0xFC61] = 0x10;		// enable maximum packet size
 	XBYTE[0xFC62] = 0xA6;		// ISO In, packet size = 1024 bytes
 	XBYTE[0xFC64] = 0x10;
 
@@ -63,6 +63,10 @@ void InitUsb2()
 
 void ISO_TEST_1()
 {
+	// Request frame/line count is 0x1F = 31
+ 	XBYTE[0xFCC4] = 0x1F;	//0xFCC4,Request_Frame/Line_Count_L
+ 	XBYTE[0xFCC5] = 0x00;	//0xFCC5,Request_Frame/Line_Count_H
+	
 	XBYTE[0xFCC0] = 0x73;
 
 	// Line count per frame is 0x1E0 = 480
@@ -70,10 +74,6 @@ void ISO_TEST_1()
  	XBYTE[0xFCC2] = 0x09;	//CIS_Config_H. [2:0] Line count(10:8) per frame. [3] if set, the "Frame Number" will show in PTS field of stream header.
  	
  	XBYTE[0xFCC3] = 0x20;	//CIS_Ctrl. 0x20:Data in enable, it will be in Idel state automatically when transfer finished. (Non-stop)
-
-	// Request frame/line count is 0x1F = 31
- 	XBYTE[0xFCC4] = 0x1F;	//0xFCC4,Request_Frame/Line_Count_L
- 	XBYTE[0xFCC5] = 0x00;	//0xFCC5,Request_Frame/Line_Count_H
 }
 
 void UpdateUSB()
@@ -89,16 +89,13 @@ START:
 		
 		if(_testbit_(BusReset)){
 			InitUsb2();
-			//P2_3=0;
 		}
 		if (BusSuspend) {
 			BusSuspend=0;
-			//P2_4=0;
 		}
 		if(_testbit_(BusResume)) {
 		}
 		if(_testbit_(PktRcv)){
-			P2_5=0;
 			controlCMD();
 		}
 
@@ -106,14 +103,10 @@ START:
 			goto START;
 		}
 		
-		if(_testbit_(GLOBAL_test)) {
-			
+		if(GLOBAL_test) {
+			GLOBAL_test=0;
 			//GPIO Pin. To control the POWER_DOWN pin of CIS sensor. 1: power down, 0: normal operation
-#ifdef OV9155
-			P3_0 = 0;
-#else	//PL2551_EVB_64, OV7675
-			P3_2 = 0;
-#endif
+			//SENSOR_POWER_PIN = SENSOR_PIN_ON;
 			ISO_TEST_1();
 		}
 	}

@@ -6,7 +6,7 @@ void InitCIS(void)
 	
 	SENSOR_POWER_PIN = SENSOR_PIN_ON;
 	InitSensor();
-	SENSOR_POWER_PIN = SENSOR_PIN_OFF;
+	//SENSOR_POWER_PIN = SENSOR_PIN_OFF;
 }
 
 // Be sure to POWER UP sensor by set Power_Down pin to 0, then it's workable to write register to sensor by I2C.
@@ -314,7 +314,6 @@ void InitSensor(void)
 
 	I2C_Write_Data(0x42,0x12,0x80); 	//reset all registers to default value
 	DelayMS(2);
-	P2_5=0;
 
 	I2C_Write_Data(0x42,0x09,0x10); 
 	for(i=0;i<50;i++);
