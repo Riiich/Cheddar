@@ -34,7 +34,7 @@ wLength			= CTRL_Buffer[6:7]  // little endian
 */
 xdata unsigned char CTRL_Buffer[8];
 xdata unsigned char SHARE_Buffer[64];
-xdata unsigned char GLOBAL_test;
+xdata unsigned char StartCIS;
 
 // Value holds current configuration
 BYTE	data		bConfiguration;
@@ -46,4 +46,5 @@ BYTE	data		bDeviceAddress;
 xdata unsigned char StartCIS = 0;
 xdata unsigned char StartCIS1 = 0;
 
+unsigned char Touchflag;
 

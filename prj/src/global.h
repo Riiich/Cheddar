@@ -64,8 +64,10 @@ extern BYTE	data		bDeviceAddress;
 
 extern xdata unsigned char CTRL_Buffer[];
 extern xdata unsigned char SHARE_Buffer[];
-extern xdata unsigned char GLOBAL_test;
+extern xdata unsigned char StartCIS;
 extern xdata unsigned char StartCIS;
 extern xdata unsigned char StartCIS1;
+
+extern unsigned char Touchflag;
 
 
