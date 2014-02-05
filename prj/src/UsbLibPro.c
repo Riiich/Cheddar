@@ -492,7 +492,7 @@ unsigned char usbSetInterface()
 		(CTRL_Buffer[6] == 0x00) &&
 		(CTRL_Buffer[7] == 0x00) 
 	){
-			GLOBAL_test=1; 	
+			StartCIS=1; 	
 			//printStr("START_OUT\n");
 	}
 */
@@ -511,7 +511,7 @@ void usb_video_class_function()
 	UAC_len = CTRL_Buffer[6];
 	
 	// Host to Device
-	if((CTRL_Buffer[0] == 0x21)) {	// If SET Request addressed to Entity ID or Interface received.
+	if((_bmRequestType == 0x21)){			// If SET Request addressed to Entity ID or Interface received.
 		
 		// Read the Request Parameters from the EP0 FIFO
 		// Potential BUG: What if the parameters data are not ready yet? I think some wait timout need to be implemented here
@@ -521,22 +521,21 @@ void usb_video_class_function()
 				SHARE_Buffer[i] = XBYTE[CONTROL_FIFO+i];
 			}
 		}
-		
-		// If we have
-		// bRequest	(Control Attribute ID)	= SET_CUR (Current Setting Attribute = 0x01 ) // CTRL_Buffer[1]
-		// wValue (Control Selector )				= 0x0200 (Control Selector = 0x02 ) // LSB CTRL_Buffer[2], MSB CTRL_Buffer[3] // WHAT IS CONTROL 0x02 ????
-		// wIndex (Entity ID, Interface )		= 0x0001 (Interface = 0x01, Entity ID = 0x00 for interface ) // LSB CTRL_Buffer[4] - Interface, MSB CTRL_Buffer[5] - Entity ID
-		// wLength ( lengths of the parameter block )	= 0x00A1 // LSB CTRL_Buffer[6], MSB CTRL_Buffer[7]
+
+		// bRequest	(Control Attribute ID) = SET_CUR (Current Setting Attribute = 0x01 ) 
+		// wValue (Control Selector  = 0x0200 (Control Selector = 0x02 ) // WHAT IS CONTROL 0x02 ????
+		// wIndex (Entity ID, Interface) = 0x0001 (Interface = 0x01, Entity ID = 0x00 for interface )
+		// wLength ( lengths of the parameter block )	= 0x00A1
 		if ((CTRL_Buffer[1] == 0x01) &&
-				(CTRL_Buffer[2] == 0x00) && 
-				(CTRL_Buffer[3] == 0x02) && 
-				(CTRL_Buffer[4] == 0x01) &&
-				(CTRL_Buffer[5] == 0x00) &&
-				(CTRL_Buffer[6] == 0x1A) &&
-				(CTRL_Buffer[7] == 0x00)){
-					GLOBAL_test = 1;
+		(CTRL_Buffer[2] == 0x00) && 
+		(CTRL_Buffer[3] == 0x02) && 
+		(CTRL_Buffer[4] == 0x01) &&
+		(CTRL_Buffer[5] == 0x00) &&
+		(CTRL_Buffer[6] == 0x1A) &&
+		(CTRL_Buffer[7] == 0x00)){
+			StartCIS = 1;
 		}
-		
+
 		//???????????????????
 		for (i=0; i<0xFE; i++) 
 		{             		
@@ -545,6 +544,7 @@ void usb_video_class_function()
 		XBYTE[EP0_CTRL] |= 0x04;	//flush control pipe
 		XBYTE[EP0_CTRL] = 0x21;		// Configure Endpoint 0: (bit5) - unmask "Packet of Data being received" interrupt, (bit0) - set Endpoint Done flag
 	}
+	
 	// Device to Host
 	else if((CTRL_Buffer[0] == 0xA1)) {	// If GET Request addressed to Entity ID or Interface received
 		
@@ -552,7 +552,6 @@ void usb_video_class_function()
 			// if the parameters data length is 0 (so no data stage expected in the request transfer )
 			// Finalyze request transfer
 			XBYTE[EP0_CTRL] = 0x21;
-			// XBYTE[EP0_CTRL] = 0x21; // Do twice???
 		}
 		
 		
@@ -580,16 +579,23 @@ void usb_video_class_function()
 		// ****************************************************************************************	
 		//	D7..D5		*	Reserved (Set to 0)										*	--
 		// ****************************************************************************************
-		if(CTRL_Buffer[1] == USB_UVC_GET_INFO) {
+		if(_bRequest == USB_UVC_GET_INFO) {
 			
-			if((CTRL_Buffer[3] == 0x03) || (CTRL_Buffer[3] == 0x06) || (CTRL_Buffer[3] == 0x08)||
-		      ((CTRL_Buffer[3] == 0x09) && (CTRL_Buffer[5] == 0x02))|| (CTRL_Buffer[3] == 0x01) || (CTRL_Buffer[3] == 0x05) ||
-			    (CTRL_Buffer[3] == 0x10) || (CTRL_Buffer[3] == 0x18) || ((CTRL_Buffer[3] == 0x07) && (CTRL_Buffer[5] == 0x02))||
-			    ((CTRL_Buffer[3] == 0x04) && (CTRL_Buffer[5] == 0x02)) || ((CTRL_Buffer[3] == 0x04) && (CTRL_Buffer[5] == 0x04))) {
-				SHARE_Buffer[0]=0x03;
-				ctrlFIFOWrite(1, SHARE_Buffer);
-				XBYTE[EP0_CTRL] = 0x21;
-		  }
+			if((CTRL_Buffer[3] == 0x03) || 
+				(CTRL_Buffer[3] == 0x06) || 
+				(CTRL_Buffer[3] == 0x08)||
+	      		((CTRL_Buffer[3] == 0x09) && (CTRL_Buffer[5] == 0x02))||
+	      		(CTRL_Buffer[3] == 0x01) ||
+	      		(CTRL_Buffer[3] == 0x05) ||
+	      		(CTRL_Buffer[3] == 0x10) ||
+	      		(CTRL_Buffer[3] == 0x18) ||
+	      		((CTRL_Buffer[3] == 0x07) && (CTRL_Buffer[5] == 0x02))||
+		    	((CTRL_Buffer[3] == 0x04) && (CTRL_Buffer[5] == 0x02))||
+		    	((CTRL_Buffer[3] == 0x04) && (CTRL_Buffer[5] == 0x04))) {
+					SHARE_Buffer[0]=0x03;
+					ctrlFIFOWrite(1, SHARE_Buffer);
+					XBYTE[EP0_CTRL] = 0x21;
+		  	}
 			/*else if( (CTRL_Buffer[3] == 0x02) ){
 				SHARE_Buffer[0]=0x03;
 				ctrlFIFOWrite(1,SHARE_Buffer);				
@@ -610,7 +616,7 @@ void usb_video_class_function()
 		}	// GET INFO
 		
 		// GET_MIN (0x82)
-		if(CTRL_Buffer[1] == USB_UVC_GET_MIN) {
+		if(_bRequest == USB_UVC_GET_MIN) {
 			if ((CTRL_Buffer[5] == 0x04) && (CTRL_Buffer[6] == 0x04)) {
 				SHARE_Buffer[0]=0x00;
 				SHARE_Buffer[1]=0x00;
@@ -1002,6 +1008,17 @@ void usb_video_class_function()
 						for(i = 0;i < 26;i++){
 							SHARE_Buffer[i]=0x00;
 						}
+#ifdef OV9155
+						SHARE_Buffer[2]=0x01; //20140128 BruceC , OV9155 SXGA
+						SHARE_Buffer[3]=0x01;
+						SHARE_Buffer[4]=0x15;
+						SHARE_Buffer[5]=0x16;
+						SHARE_Buffer[6]=0x05;
+						SHARE_Buffer[19]=0x00;
+						SHARE_Buffer[20]=0x28;
+						SHARE_Buffer[22]=0x00;
+						SHARE_Buffer[23]=0x04;
+#else
 						SHARE_Buffer[2]=0x01;
 						SHARE_Buffer[3]=0x01;
 						SHARE_Buffer[4]=0x15;
@@ -1011,6 +1028,7 @@ void usb_video_class_function()
 						SHARE_Buffer[20]=0x09;
 						SHARE_Buffer[22]=0x80;
 						SHARE_Buffer[23]=0x0A;
+#endif						
 						ctrlFIFOWrite(26,SHARE_Buffer);
 						XBYTE[EP0_CTRL] = 0x21;
 						test_flag = 1;
@@ -1020,6 +1038,18 @@ void usb_video_class_function()
 						{
 							SHARE_Buffer[i]=0x00;
 						}
+#ifdef OV9155
+						SHARE_Buffer[2]=0x01; //20140128 BruceC , OV9155 SXGA
+						SHARE_Buffer[3]=0x01;
+						SHARE_Buffer[4]=0x15;
+						SHARE_Buffer[5]=0x16;
+						SHARE_Buffer[6]=0x05;
+						SHARE_Buffer[19]=0x00;
+						SHARE_Buffer[20]=0x28;
+						SHARE_Buffer[22]=0x00;
+						SHARE_Buffer[23]=0x04;
+
+#else
 						SHARE_Buffer[2]=0x01;
 						SHARE_Buffer[3]=0x01;
 						SHARE_Buffer[4]=0x15;
@@ -1029,6 +1059,7 @@ void usb_video_class_function()
 						SHARE_Buffer[20]=0x09;
 						SHARE_Buffer[22]=0x00;
 						SHARE_Buffer[23]=0x0C;
+#endif
 						ctrlFIFOWrite(26,SHARE_Buffer);
 						XBYTE[EP0_CTRL] = 0x21;
 						//test_flag = 2;
