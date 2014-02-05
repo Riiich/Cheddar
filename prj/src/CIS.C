@@ -6,7 +6,6 @@ void InitCIS(void)
 	
 	SENSOR_POWER_PIN = SENSOR_PIN_ON;
 	InitSensor();
-	//SENSOR_POWER_PIN = SENSOR_PIN_OFF;
 }
 
 // Be sure to POWER UP sensor by set Power_Down pin to 0, then it's workable to write register to sensor by I2C.
