@@ -63,37 +63,93 @@ void InitUsb2()
 
 void ISO_TEST_1()
 {
+#ifdef OV9155
+	// Request frame/line count is 0xFFFF = 65535
+ 	XBYTE[0xFCC4] = 0xFF;	//0xFCC4,Request_Frame/Line_Count_L
+ 	XBYTE[0xFCC5] = 0xFF;	//0xFCC5,Request_Frame/Line_Count_H
+ 	
+	XBYTE[0xFCC0] = 0x72;	//CIS_Config_byte0. [7:5] Length of stream header: 12 Byte (20140128 BruceC for OV9155 SXGA)
+
+	// Line count per frame is 0x400 = 1024
+	XBYTE[0xFCC1] = 0x00;	//CIS_Config_byte1. [7:0] Line count(7:0) per frame.
+ 	XBYTE[0xFCC2] = 0x0C;	//CIS_Config_byte2. [2:0] Line count(10:8) per frame. [3] if set, the "Frame Number" will show in PTS field of stream header.
+#else
 	// Request frame/line count is 0x1F = 31
- 	XBYTE[0xFCC4] = 0x1F;	//0xFCC4,Request_Frame/Line_Count_L
- 	XBYTE[0xFCC5] = 0x00;	//0xFCC5,Request_Frame/Line_Count_H
-	
-	XBYTE[0xFCC0] = 0x73;
+	XBYTE[0xFCC4] = 0x1F;	//0xFCC4,Request_Frame/Line_Count_L
+	XBYTE[0xFCC5] = 0x00;	//0xFCC5,Request_Frame/Line_Count_H
+
+	XBYTE[0xFCC0] = 0x73;	//CIS_Config_byte0. [7:5] Length of stream header.
 
 	// Line count per frame is 0x1E0 = 480
-	XBYTE[0xFCC1] = 0xE0;	//CIS_Config_L. [7:0] Line count(7:0) per frame.
- 	XBYTE[0xFCC2] = 0x09;	//CIS_Config_H. [2:0] Line count(10:8) per frame. [3] if set, the "Frame Number" will show in PTS field of stream header.
- 	
+	XBYTE[0xFCC1] = 0xE0;	//CIS_Config_byte1. [7:0] Line count(7:0) per frame.
+ 	XBYTE[0xFCC2] = 0x09;	//CIS_Config_byte2. [2:0] Line count(10:8) per frame. [3] if set, the "Frame Number" will show in PTS field of stream header.
+#endif
+ 
  	XBYTE[0xFCC3] = 0x20;	//CIS_Ctrl. 0x20:Data in enable, it will be in Idel state automatically when transfer finished. (Non-stop)
 }
 
 void UpdateUSB()
 {
-	InitUsb2();
-	
 START:
 	
+	InitUsb2();
+	XBYTE[0xFF05] = 0x00;						// disable CIS and FIFO soft reset
+	
 	while( (XBYTE[0xFC01] & 0x80) != 0x80 );	// check if any external USB VBUS pin input
-	XBYTE[0xFC00] =  0x01 | 0x08;				// Attach device to USB bus and enable the MASTER control of USB interrupt 
+	DelayMS( 20 );
+	while( (XBYTE[0xFC01] & 0x80) != 0x80 );	// check if any external USB VBUS pin input
+	XBYTE[0xFC00] =  0x01 | 0x08;				// Attach device to USB bus and enable the MASTER control of USB interrupt
+	XBYTE[0xFC00] |= 0x04;						// Remote wakeup enable
+	XBYTE[0xFC06] = 0x0F;						// enable BusSuspend, BusResume, BusReset and VbusInt interrupts
 	
 	while (0xFF) {
 		
 		if(_testbit_(BusReset)){
+			XBYTE[0xFF05] = 0x06;				// CIS and FIFO soft reset
+			DelayMS(1);
+			XBYTE[0xFF05] = 0x00;				// disable CIS and FIFO soft reset
 			InitUsb2();
 		}
 		if (BusSuspend) {
 			BusSuspend=0;
+#ifdef OV9155
+			EIE = 0x00;							//Close P2.2 Touch interrupt
+			EIP = 0x00;							//Close P2.2 Touch interrupt
+
+			IE |= 0x04;							//Enable P1.5 Touch Interrupt
+			IP |= 0x04;
+
+			P3_7=0; 							//BruceC,CIS_D5_EN = 0
+			P3_6=1; 							//BruceC,SWT0_EN =1
+
+			P1_5 =1;
+			XBYTE[0xFF0B]  = 0x00;  			//P2_2 interupt close
+			XBYTE[0xFF0A]  = 0xD0;  			//P1_5 interupt
+			P2_2=0;
+			
+			SENSOR_POWER_PIN = SENSOR_PIN_OFF;	//Power OFF sensor
+
+			EventHdl_BusSuspend();
+#endif
+
 		}
 		if(_testbit_(BusResume)) {
+#ifdef OV9155
+			IE &= 0xFB;							//Close P1.5 Touch Interrupt
+			IP &= 0xFB;
+			EIE = 0x01;							//Enable P2.2 Touch Interrupt
+			EIP = 0x00;							//Close P2.2 Touch interrupt
+
+			P3_7=1;								//BruceC,CIS_D5_EN = 0
+			P3_6=0;								//BruceC,SWT0_EN =1
+
+			P2_2=1;
+			XBYTE[0xFF0A]  = 0x00;				//P1_5 interupt close
+			XBYTE[0xFF0B]  = 0x0A;				//P2_2 interupt 
+			P1_5 =0;
+
+			InitCIS();
+#endif
 		}
 		if(_testbit_(PktRcv)){
 			controlCMD();
@@ -103,10 +159,8 @@ START:
 			goto START;
 		}
 		
-		if(GLOBAL_test) {
-			GLOBAL_test=0;
-			//GPIO Pin. To control the POWER_DOWN pin of CIS sensor. 1: power down, 0: normal operation
-			//SENSOR_POWER_PIN = SENSOR_PIN_ON;
+		if(StartCIS) {
+			StartCIS=0;
 			ISO_TEST_1();
 		}
 	}
@@ -189,70 +243,58 @@ unsigned char ctrlFIFOWrite(unsigned int len, unsigned char *buf )
 		return USB_DONE;
 }
 
-/*
-// Endpoint 0 FIFO Read 
-unsigned char ctrlFIFORead(unsigned char *buf )
-{
-	unsigned int  j;
+// Subroutine for handling the USB BUS Suspend condition
+void EventHdl_BusSuspend(void) {
 
-    // read out the 8-byte control data from endpoint 0 FIFO to user defined buffer
-    for( j=0; j<8; j++ ){
-      buf[j] = XBYTE[0xF000+j];
+	///////////////////////////////////////////////////////////////////////////////
+	// check if USB cable is unplugged
+	///////////////////////////////////////////////////////////////////////////////
+	SetTimer ( 20 );      // set 20ms and start counting
+	///////////////////////////////////////////////////////////////////////////////
+	while ( !IsTimerExpired() ){
+		if ( BusReset || BusResume ){
+			ResetTimer();
+			BusResume = 0;
+			return;
+		} // if
+	} // while
+	///////////////////////////////////////////////////////////////////////////////
 
-    }
-   
-    // If there are not any data following this control transfer, restore EP0 interrupt here.
-	if( (!((buf[0] == 0x21) && (buf[1] == 0x20) && (buf[6] == 0x07))) && (!((buf[0] == 0x21) &&  (buf[1] == 0x01))) 
-				&& (!( (buf[0] == 0x21) && (buf[1] == 0xFF) && (buf[2] == 0x00) && (buf[6] != 0) ) ) )
-	{
-		XBYTE[0xFCB2] |= 0x01;	 //restore EP0
-	}       
+	ResetTimer();
 
-	XBYTE[0xFC34] = 0x2C; //bit3:EP read   bit2:flush
+	///////////////////////////////////////////////////////////////////////////////
+	if ( ( XBYTE[DEV_STATUS] & 0x80 ) == 0 ){
+		return; 
+	} // USB unplugged
 
-    // During the FIFO flush operation, if bus reset or detach occur, return immediately.
-	while( XBYTE[0xFC34] & 0x04 ){
-		if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
-			return 0;
-		}
+	///////////////////////////////////////////////////////////////////////////////
+	// start suspending
+	///////////////////////////////////////////////////////////////////////////////
+
+	XBYTE[0xFC06] = 0x07;			// enable BusResume, BusReset and VbusInt interrupt
+
+	// disable Suspend interrupt 
+	if(RemoteWakeup){
+		XBYTE[0xFC00] = 0x0F;		//Richard(Prolific) say force set
+	}
+	else{
+		XBYTE[0xFC00] = 0x0B;
 	}
 
-    return( TRUE );
+	// CPU clock will be stopped some clock cycles after suspend enable bit in register 0xFC00 is set
+	// 
+	///////////////////////////////////////////////////////////////////////////////
+	// 48 NOP
+	///////////////////////////////////////////////////////////////////////////////
+	_nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_();
+	_nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_();
+	_nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_();
+	_nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_();
+	_nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_();
+	_nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_(); _nop_();
+	///////////////////////////////////////////////////////////////////////////////
+	
+	do { XBYTE[0xFC06] = 0x0F;}
+	while ( XBYTE[0xFC06] != 0x0F );
+	
 }
-
-
-// Endpoint 0 FIFO Write
-unsigned char ctrlFIFOWrite(  unsigned int len, unsigned char *buf )
-{
-	unsigned int i,j = 0;
-	
-	while( XBYTE[0xFC34] & 0x04 ){
-		if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
-			return 0;
-		}
-	}	
-	
-	while ( len > 64 ){
-		for ( i = 0; i < 64; i++ ){ 
-			XBYTE[0xF000 + i] = buf[j++]; 
-		}
-			
-		len -= 64;
-
-		// check whether the FIFO is empty or not
-		while( (XBYTE[0xFC37] & 0x20) == 0 ){
-			if( BusReset || (XBYTE[0xFC01] & 0x80 == 0)){
-				return 0;
-			}			
-		}
-	}
-	
-	for ( i = 0; i < len; i++ ) { 
-		XBYTE[0xF000 + i] = buf[j++]; 
-	}
-
-	XBYTE[0xFC34] = 0x21;
-
-  return( TRUE );
-}
-*/
