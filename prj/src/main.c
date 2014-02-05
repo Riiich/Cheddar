@@ -22,9 +22,26 @@ void Initial_Sub()
 
 void InitC51(void)
 {
+#ifdef OV9155
+	P3_7=1;		//BruceC, CIS_D5_EN = 1
+	P3_6=0;		//BruceC, SWT0_EN =0
+
+	P2_3 = 0;	//LED init
+	P2_4 = 1;
+	P2_5 = 0;
+	P2_6 = 0;
+
+	P2_2 =1;	//for Touch pull-high
+#endif
+
 	IE = 0x83;					//ET0, EX0(USB), EX1(SATA) interrupt enable
 	IP = 0x01;					//Set EX0 to higher priority
+
+	EIE = 0x01;					//EX2 Enable //20140116 BruceC
+	EIP = 0x01;					//EX2 to higher priority //20140116 BruceC
+	
 	IT0 = 0;					//INT0 level trigger
+	IT1 = 0;                    //INT1 level trigger //20140116 BruceC for P1.5 touch
 
 	InitTimer();
 
@@ -36,6 +53,9 @@ void InitC51(void)
 #else
 	XBYTE[0xFF04] = 0x80;		//clk_ctrl. bit[6:7]:10,MCLK=12MHz.01,MCLK=24MHz.
 #endif
+
+	XBYTE[0xFF0B]  = 0x0A;		//P2_2 interupt //20140116 BruceC
+	//XBYTE[0xFF0A]  = 0xD0;		//P1_5 interupt
 }
 
 void blinker(void) {
