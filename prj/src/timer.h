@@ -6,6 +6,10 @@ extern idata unsigned char ms_TL1_value;
 
 void InitTimer(void);
 void DelayMS(unsigned short msec);
+void SetTimer( unsigned short msec );
+bit IsTimerExpired(void);
+void ResetTimer(void);
+
 
 #endif
 
